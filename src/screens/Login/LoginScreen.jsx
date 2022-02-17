@@ -13,12 +13,10 @@ const LoginScreen = ({setToken, setId}) => {
     const { height } = useWindowDimensions();
 
     const onLoginPressed = () => {
-        console.log('login pressed!');
        axios.post(`${API_URL}/login`, {email,password})
-       .then((res) => {
-           console.log(res);
-            // setToken(res.token);
-            // setId(res.id)
+       .then(({data}) => {
+            setToken(data.token);
+            setId(data.id)
        }).catch((err) => {
            console.warn(err);
        })
