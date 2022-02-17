@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "spacebook_frontend",
+    "slug": "spacebook_frontend",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
