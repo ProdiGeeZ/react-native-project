@@ -55,7 +55,7 @@ const LoginScreen = ({ screenProps, navigation }) => {
 					text='Login'
 					onPress={onLoginPressed}
 					type='PRIMARY' />
-
+				<Text style={{ width: 50, textAlign: 'center' }}>OR</Text>
 				<CustomButton
 					text="Don't have an account? Register"
 					onPress={redirectToSignUp}
