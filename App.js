@@ -4,12 +4,16 @@ import { StyleSheet, View } from 'react-native';
 import Navigator from './routes/stack'
 
 export default function App() {
-  const [toke, setToken] = useState('');
+  const [token, setToken] = useState('');
   const [id, setId] = useState('');
   return (
     <View style={styles.root}>
-      {/* TODO: Figure out how to pass states to first component in Navigator */}
-      <Navigator />
+      <Navigator screenProps={{
+        token,
+        setToken,
+        id,
+        setId,
+      }} />
       <StatusBar style="auto" />
     </View>
   );
