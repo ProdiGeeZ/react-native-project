@@ -6,7 +6,8 @@ import Logo from '../../assets/images/rocket.png'
 import CustomButton from '../components/CustomButton/CustomButton';
 import CustomInput from '../components/CustomInput/CustomInput';
 
-const LoginScreen = ({ setToken, setId, navigation }) => {
+const LoginScreen = ({ screenProps, navigation }) => {
+	const { setId, setToken, token } = screenProps;
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 
@@ -17,6 +18,7 @@ const LoginScreen = ({ setToken, setId, navigation }) => {
 			.then(({ data }) => {
 				setToken(data.token);
 				setId(data.id);
+				console.log(`done - heres the token ${token}`);
 				// TODO: Navigate to next screen
 			}).catch((err) => {
 				//TODO: Validation
