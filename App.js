@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Navigator from './routes/stack'
+import Navigator from './src/navigation'
 
 export default function App() {
   const [token, setToken] = useState('');
