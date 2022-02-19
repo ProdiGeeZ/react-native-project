@@ -33,7 +33,7 @@ const LoginScreen = ({ screenProps, navigation }) => {
 
 	return (
 		<KeyboardAwareScrollView style={styles.container} >
-			<View nativeID="some-id" style={{ flex: 2 }}>
+			<View style={{ flex: 2 }}>
 				<Image
 					source={Logo}
 					style={styles.logo}
