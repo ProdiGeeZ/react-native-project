@@ -5,10 +5,10 @@ import { Icon, Input, FormControl, WarningOutlineIcon, Button } from 'native-bas
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { API_URL } from '../../consts.json';
-import Logo from '../../assets/images/rocket.png'
+import Logo from '../../assets/images/rocket.png';
 
 const LoginScreen = ({ screenProps, navigation }) => {
-	const { setId, setToken, token } = screenProps;
+	const { setId, setToken, token, id } = screenProps;
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState(false);
@@ -20,8 +20,9 @@ const LoginScreen = ({ screenProps, navigation }) => {
 				await setToken(data.token);
 				await setId(data.id);
 				console.log(`done - heres the token ${token} ${id}`);
-				// TODO: Navigate to next screen
+				navigation.navigate('Home');
 			}).catch(async (err) => {
+				console.log(err);
 				await setError(!error);
 			})
 	}
