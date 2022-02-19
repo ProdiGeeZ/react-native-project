@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, ScrollView, ImageBackground, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { Icon, Input, FormControl, WarningOutlineIcon, Button } from 'native-base';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { API_URL } from '../../consts.json';
 import Logo from '../../assets/images/rocket.png'
@@ -12,16 +13,16 @@ const LoginScreen = ({ screenProps, navigation }) => {
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState(false);
 
-	const onLoginPressed = () => {
+	const onLoginPressed = async () => {
+		await setError(false);
 		axios.post(`${API_URL}/login`, { email, password })
-			.then(({ data }) => {
-				setToken(data.token);
-				setId(data.id);
-				console.log(`done - heres the token ${token}`);
+			.then(async ({ data }) => {
+				await setToken(data.token);
+				await setId(data.id);
+				console.log(`done - heres the token ${token} ${id}`);
 				// TODO: Navigate to next screen
-			}).catch((err) => {
-				setError(!error);
-				console.warn(err);
+			}).catch(async (err) => {
+				await setError(!error);
 			})
 	}
 
@@ -30,91 +31,96 @@ const LoginScreen = ({ screenProps, navigation }) => {
 	}
 
 	return (
-		<ScrollView style={styles.container} showsVerticalScrollIndicator={true}>
-			<ImageBackground
-				source={Logo}
-				style={styles.logo}
-			/>
-			<View>
+		<KeyboardAwareScrollView style={styles.container} >
+			<View nativeID="some-id" style={{ flex: 2 }}>
+				<Image
+					source={Logo}
+					style={styles.logo}
+				/>
 				<Text style={styles.brandViewText}>Spacebook</Text>
 			</View>
+			<View style={{ flex: 4 }, [styles.bottomView]}>
+				{/* Form inputs */}
+				<FormControl isInvalid={error} style={styles.formControl}>
+					<Input
+						variant='underlined'
+						keyboardType='email-address'
+						InputLeftElement={<Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="muted.400" />}
+						placeholder="Enter Email"
+						onChangeText={text => setEmail(text)}
+					/>
+					<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+						Email/Password is incorrect
+					</FormControl.ErrorMessage>
+				</FormControl>
+				<FormControl isInvalid={error} style={styles.formControl}>
+					<Input
+						variant='underlined'
+						InputLeftElement={<Icon as={<AntDesign name="lock" />} size={5} ml="2" color="muted.400" />}
+						placeholder="Enter password"
+						secureTextEntry
+						onChangeText={text => setPassword(text)}
+					/>
+					<FormControl.HelperText>
+						Must be atleast 6 characters.
+					</FormControl.HelperText>
+					<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+						Email/Password is incorrect
+					</FormControl.ErrorMessage>
+				</FormControl>
 
-			<View style={styles.bottomView}>
-				<View style={{ padding: 30 }}>
-					<Text style={styles.heading}>Welcome</Text>
-					<Text>Don't have an account?
-						<Text style={styles.registerTxt}>{' '} Register now</Text>
-					</Text>
-
-					{/* Form inputs */}
-					<View>
-						<FormControl isInvalid={error} style={styles.formControl}>
-							<Input
-								variant='underlined'
-								keyboardType='email-address'
-								InputLeftElement={<Icon as={<MaterialIcons name="person" />} size={5} ml="2" color="muted.400" />}
-								placeholder="Enter Email"
-								onChangeText={text => setEmail(text)}
-							/>
-							<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-								Email/Password is incorrect
-							</FormControl.ErrorMessage>
-						</FormControl>
-						<FormControl isInvalid={error} style={styles.formControl}>
-							<Input
-								variant='underlined'
-								InputLeftElement={<Icon as={<AntDesign name="lock" />} size={5} ml="2" color="muted.400" />}
-								placeholder="Enter password"
-								onChangeText={text => setPassword(text)}
-							/>
-							<FormControl.HelperText>
-								Must be atleast 6 characters.
-							</FormControl.HelperText>
-							<FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-								Email/Password is incorrect
-							</FormControl.ErrorMessage>
-						</FormControl>
-
-						<View style={styles.button}>
-							<Button rounded style={styles.login}>
-								<Text> Login </Text>
-							</Button>
-						</View>
-					</View>
+				<View style={styles.button}>
+					<Button
+						size="lg"
+						variant="outline"
+						colorScheme={'rgb(255,143,115)'}
+						color='white'
+						onPress={() => onLoginPressed()}
+						width='45%'
+					>
+						Login
+					</Button>
 				</View>
+				<TouchableOpacity onPress={() => redirectToSignUp()}>
+					<Text style={{ color: 'grey', textAlign: 'center' }}>Don't have an account?
+						<Text style={styles.registerTxt}>{' '}Register now</Text>
+					</Text>
+				</TouchableOpacity>
 			</View>
-		</ScrollView >
+		</KeyboardAwareScrollView >
 	)
 };
 
 
 const styles = StyleSheet.create({
 	container: {
-		flexDirection: 'column',
+		flex: 1,
 		backgroundColor: '#ff8f73',
-		paddingTop: 25,
+		paddingTop: 15
 	},
 	brandViewText: {
 		textAlign: 'center',
 		color: 'white',
-		fontSize: 40,
+		fontSize: 28,
 		fontWeight: 'bold',
 		textTransform: 'uppercase'
 	},
 	button: {
-		height: 100,
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		paddingBottom: 25,
+		paddingTop: 5,
 	},
 	bottomView: {
-		flex: 3,
+		marginTop: 'auto',
+		padding: 30,
 		backgroundColor: 'white',
 		borderTopStartRadius: 60,
 		borderTopEndRadius: 60,
-		height: '100%'
+		height: Dimensions.get('window').height / 2.2
 	},
 	formControl: {
-		padding: 10,
+		padding: 20,
 	},
 	heading: {
 		color: '#f27d0c',
@@ -122,11 +128,11 @@ const styles = StyleSheet.create({
 	},
 	logo: {
 		height: Dimensions.get('window').height / 2,
+		width: Dimensions.get('window').width
 	},
 	login: {
 		alignSelf: 'center',
 		backgroundColor: '#ff8f73',
-		width: Dimensions.get('window').width / 2,
 		justifyContent: 'center'
 	},
 	registerTxt: {
