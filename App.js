@@ -23,7 +23,7 @@ function DrawerRoutes() {
     <Drawer.Navigator
       drawerContent={props => <DrawerContent {...props} />}
     >
-      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Feed" component={Home} />
     </Drawer.Navigator>
   )
 }
