@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
 import { View, StyleSheet } from 'react-native';
 import {
@@ -10,22 +10,14 @@ import {
   Caption,
   Paragraph,
   Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
-  Icon
 } from 'react-native-paper';
 import { API_URL } from '../../consts.json';
 import { UserContext } from '../context/UserContext';
-import { useFocusEffect } from '@react-navigation/native';
 
 const DrawerContent = (props) => {
 
   const user = useContext(UserContext);
-  const { id, token } = user;
-
-  const [details, setDetials] = useState({ profile: {}, photo: '' });
-
+  const { id, token, details, setDetails } = user;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,8 +34,7 @@ const DrawerContent = (props) => {
           'Content-Type': 'application/json'
         }
       });
-
-      setDetials({ profile: userProfileGlobal.data, photo: userProfilePhoto.data });
+      setDetails({ profile: userProfileGlobal.data, photo: userProfilePhoto.data });
     };
     fetchData();
   }, [id, token]);
@@ -63,6 +54,8 @@ const DrawerContent = (props) => {
         await alert('Sorry - Something went wrong')
       });
   }
+
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -87,6 +80,23 @@ const DrawerContent = (props) => {
               </View>
             </View>
           </View>
+          <Drawer.Section style={styles.drawerSection}>
+            <Drawer.Item
+              icon="home"
+              label="Home"
+              onPress={() => { props.navigation.navigate('Feed') }}
+            />
+            <Drawer.Item
+              icon="account-circle"
+              label="Profile"
+              onPress={() => { props.navigation.navigate('Profile') }}
+            />
+            <Drawer.Item
+              label="Settings"
+              icon='cog'
+              onPress={() => { props.navigation.navigate('Settings', { screen: 'SettingsScreen' }); }}
+            />
+          </Drawer.Section>
         </View>
       </DrawerContentScrollView >
       <Drawer.Item

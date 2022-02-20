@@ -7,14 +7,20 @@ export const UserProvider = ({ children }) => {
 
   const [token, setToken] = useState('');
   const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+  const [details, setDetails] = useState({ profile: {}, photo: '' });
 
   return (
     <UserContext.Provider
       value={{
-        token,
+        details,
         id,
+        password,
+        setDetails,
+        setId,
+        setPassword,
         setToken,
-        setId
+        token
       }}
     >
       {children}
