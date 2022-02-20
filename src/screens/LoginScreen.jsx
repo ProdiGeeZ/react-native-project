@@ -10,10 +10,10 @@ import { UserContext } from '../context/UserContext';
 
 const LoginScreen = ({ navigation }) => {
 	const user = useContext(UserContext);
+	const { password, setPassword } = user;
 
 	// local states
 	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
 	const [error, setError] = useState(false);
 
 	const onLoginPressed = async () => {

@@ -32,7 +32,8 @@
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
-    "react-navigation": "^4.4.4"
+    "react-navigation": "^4.4.4",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

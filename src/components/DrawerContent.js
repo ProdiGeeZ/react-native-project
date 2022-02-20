@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
 import { View, StyleSheet } from 'react-native';
 import {
@@ -10,16 +10,34 @@ import {
   Caption,
   Paragraph,
   Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
-  Icon
 } from 'react-native-paper';
 import { API_URL } from '../../consts.json';
 import { UserContext } from '../context/UserContext';
 
 const DrawerContent = (props) => {
+
   const user = useContext(UserContext);
+  const { id, token, details, setDetails } = user;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const userProfileGlobal = await axios.get(`${API_URL}/user/${id}`, {
+        headers: {
+          'X-Authorization': token,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const userProfilePhoto = await axios.get(`${API_URL}/user/${id}/photo`, {
+        headers: {
+          'X-Authorization': token,
+          'Content-Type': 'application/json'
+        }
+      });
+      setDetails({ profile: userProfileGlobal.data, photo: userProfilePhoto.data });
+    };
+    fetchData();
+  }, [id, token]);
 
   const logOut = () => {
     axios.post(`${API_URL}/logout`, {}, {
@@ -36,6 +54,8 @@ const DrawerContent = (props) => {
         await alert('Sorry - Something went wrong')
       });
   }
+
+
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -44,25 +64,48 @@ const DrawerContent = (props) => {
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: 'https://api.adorable.io/avatars/50/abott@adorable.png'
+                  uri: details.photo
                 }}
                 size={50}
               />
               <View style={{ marginLeft: 15, flexDirection: 'column' }}>
-                <Title style={styles.title}>John Doe</Title>
-                <Caption style={styles.caption}>Joe@gmail.com</Caption>
+                <Title style={styles.title}>{details.profile.first_name} {details.profile.last_name}</Title>
+                <Caption style={styles.caption}>{details.profile.email}</Caption>
+              </View>
+            </View>
+            <View style={{ marginLeft: 15 }, [styles.row]}>
+              <View style={styles.section}>
+                <Paragraph style={[styles.paragraph, styles.caption]}>{details.profile.friend_count}</Paragraph>
+                <Caption style={styles.caption}>Friends</Caption>
               </View>
             </View>
           </View>
+          <Drawer.Section style={styles.drawerSection}>
+            <Drawer.Item
+              icon="home"
+              label="Home"
+              onPress={() => { props.navigation.navigate('Feed') }}
+            />
+            <Drawer.Item
+              icon="account-circle"
+              label="Profile"
+              onPress={() => { props.navigation.navigate('Profile') }}
+            />
+            <Drawer.Item
+              label="Settings"
+              icon='cog'
+              onPress={() => { props.navigation.navigate('Settings', { screen: 'SettingsScreen' }); }}
+            />
+          </Drawer.Section>
         </View>
-      </DrawerContentScrollView>
+      </DrawerContentScrollView >
       <Drawer.Item
         style={styles.bottomDrawerSection}
         label="Log out"
         icon='logout'
         onPress={() => { logOut() }}
       />
-    </View>
+    </View >
   )
 }
 
@@ -78,6 +121,20 @@ const styles = StyleSheet.create({
   },
   drawerContent: {
     flex: 1,
+  },
+  paragraph: {
+    fontWeight: 'bold',
+    marginRight: 3,
+  },
+  row: {
+    marginTop: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  section: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 15,
   },
   title: {
     fontSize: 16,
