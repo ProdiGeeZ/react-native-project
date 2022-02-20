@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { Text, View, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { API_URL } from '../../consts.json'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Logo from '../../assets/images/rocket.png';
 import { FormControl, Icon, Input, WarningOutlineIcon, Button, ScrollView } from 'native-base';
-import { MaterialIcons, Entypo } from "@expo/vector-icons"
+import { MaterialIcons, Entypo } from "@expo/vector-icons";
+import { UserContext } from "../context/UserContext";
 
 const SignUpScreen = ({
-  screenProps,
   navigation,
 }) => {
-  const { setId } = screenProps;
+
+  const user = useContext(UserContext);
+
+  // localState
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -19,14 +22,16 @@ const SignUpScreen = ({
   const [error, setError] = useState(false);
 
   const onRegisterPressed = async () => {
+    console.log('onSignup pressed');
     await setError(false);
     axios.post(`${API_URL}/user`, { first_name: firstName, last_name: lastName, email, password })
       .then(async ({ data }) => {
         console.log(`hello - ${data.id}`);
-        await setId(data.id);
+        await user.setId(data.id);
         navigation.goBack();
       }).catch(async (err) => {
-        await setError(!error)
+        await setError(!error);
+        console.log(err);
       })
   }
 

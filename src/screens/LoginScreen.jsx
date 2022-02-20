@@ -1,14 +1,17 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { Icon, Input, FormControl, WarningOutlineIcon, Button } from 'native-base';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 import { API_URL } from '../../consts.json';
 import Logo from '../../assets/images/rocket.png';
+import { UserContext } from '../context/UserContext';
 
-const LoginScreen = ({ screenProps, navigation }) => {
-	const { setId, setToken, token, id } = screenProps;
+const LoginScreen = ({ navigation }) => {
+	const user = useContext(UserContext);
+
+	// local states
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState(false);
@@ -17,9 +20,9 @@ const LoginScreen = ({ screenProps, navigation }) => {
 		await setError(false);
 		axios.post(`${API_URL}/login`, { email, password })
 			.then(async ({ data }) => {
-				await setToken(data.token);
-				await setId(data.id);
-				console.log(`done - heres the token ${token} ${id}`);
+				await user.setToken(data.token);
+				await user.setId(data.id);
+				console.log(`done - heres the token ${user.token} ${user.id}`);
 				navigation.navigate('Home');
 			}).catch(async (err) => {
 				console.log(err);
