@@ -17,7 +17,7 @@ import { UserContext } from '../context/UserContext';
 const DrawerContent = (props) => {
 
   const user = useContext(UserContext);
-  const { id, token, details, setDetails } = user;
+  const { id, token, details, setDetails, rerender } = user;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +37,7 @@ const DrawerContent = (props) => {
       setDetails({ profile: userProfileGlobal.data, photo: userProfilePhoto.data });
     };
     fetchData();
-  }, [id, token]);
+  }, [id, token, rerender]);
 
   const logOut = () => {
     axios.post(`${API_URL}/logout`, {}, {
@@ -90,6 +90,11 @@ const DrawerContent = (props) => {
               icon="account-circle"
               label="Profile"
               onPress={() => { props.navigation.navigate('Profile') }}
+            />
+            <Drawer.Item
+              icon="account-box-multiple"
+              label="Friend Requests"
+              onPress={() => { props.navigation.navigate('Friend Requests') }}
             />
             <Drawer.Item
               label="Settings"
