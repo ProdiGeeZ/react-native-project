@@ -8,6 +8,7 @@ export const UserProvider = ({ children }) => {
   const [token, setToken] = useState('');
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [rerender, setRerender] = useState(false);
   const [details, setDetails] = useState({ profile: {}, photo: '' });
 
   return (
@@ -16,6 +17,8 @@ export const UserProvider = ({ children }) => {
         details,
         id,
         password,
+        rerender,
+        setRerender,
         setDetails,
         setId,
         setPassword,
