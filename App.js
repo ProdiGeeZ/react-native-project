@@ -16,6 +16,8 @@ import DrawerContent from './src/components/DrawerContent';
 import { UserProvider } from './src/context/UserContext';
 import SettingsScreen from './src/screens/SettingsScreen';
 import FriendRequestScreen from './src/screens/FriendRequest';
+import FriendsScreen from './src/screens/FriendsScreen';
+import UserDetailsScreen from './src/screens/UserDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -28,6 +30,8 @@ function DrawerRoutes() {
       <Drawer.Screen name="Feed" component={Home} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="Friend Requests" component={FriendRequestScreen} />
+      <Drawer.Screen name="Friends" component={FriendsScreen} />
+      <Drawer.Screen name="User" component={UserDetailsScreen} />
     </Drawer.Navigator>
   )
 }
