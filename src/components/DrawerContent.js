@@ -13,6 +13,7 @@ import {
 } from 'react-native-paper';
 import { API_URL } from '../../consts.json';
 import { UserContext } from '../context/UserContext';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const DrawerContent = (props) => {
 
@@ -75,8 +76,11 @@ const DrawerContent = (props) => {
             </View>
             <View style={{ marginLeft: 15 }, [styles.row]}>
               <View style={styles.section}>
-                <Paragraph style={[styles.paragraph, styles.caption]}>{details.profile.friend_count}</Paragraph>
-                <Caption style={styles.caption}>Friends</Caption>
+                <TouchableOpacity onPress={() => props.navigation.navigate('Friends')}>
+                  <Paragraph style={[styles.paragraph, styles.caption]}>{details.profile.friend_count} {' '}
+                    <Caption style={styles.caption}>Friends</Caption>
+                  </Paragraph>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -138,7 +142,6 @@ const styles = StyleSheet.create({
   },
   section: {
     flexDirection: 'row',
-    alignItems: 'center',
     marginRight: 15,
   },
   title: {
