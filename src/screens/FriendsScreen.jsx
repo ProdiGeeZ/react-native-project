@@ -4,7 +4,7 @@ import axios from 'axios';
 import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
 
-import { Avatar, List } from 'react-native-paper';
+import { Avatar, List, Text } from 'react-native-paper';
 
 const FriendsScreen = ({ navigation }) => {
 
@@ -31,12 +31,15 @@ const FriendsScreen = ({ navigation }) => {
     }).then(data => setFriends(data.data))
       .catch(err => console.log(err))
   }, [user.rerender]);
-  console.log({ friends });
+
 
   return (
     <View style={styles.root}>
       <View>
-        {friends.map((friend) => (
+
+        <Text style={{ textAlign: 'center' }}>Your Friends:</Text>
+
+        {friends.length > 0 ? friends.map((friend) => (
           <TouchableOpacity onPress={() => navigation.navigate('User', { id: friend.user_id })}>
             <List.Item
               title={`${friend.user_givenname} ${friend.user_familyname}`}
@@ -44,12 +47,16 @@ const FriendsScreen = ({ navigation }) => {
               left={props =>
                 <Avatar.Image
                   size={60}
-                  source={getProfilePhoto(friend.user_id) ? '' : '../../assets/image/profile.png'}
+                  source={{
+                    uri: getProfilePhoto(friend.user_id) ? '' :
+                      'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png'
+                  }}
                 />}
             />
           </TouchableOpacity>
-        ))}
+        )) : <Text>No friends to show :( </Text>}
       </View>
+
     </View >
   )
 }
