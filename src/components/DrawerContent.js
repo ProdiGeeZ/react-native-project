@@ -93,7 +93,7 @@ const DrawerContent = (props) => {
             <Drawer.Item
               icon="account-circle"
               label="Profile"
-              onPress={() => { props.navigation.navigate('Profile') }}
+              onPress={() => { props.navigation.navigate('User', { id }) }}
             />
             <Drawer.Item
               icon="account-box-multiple"

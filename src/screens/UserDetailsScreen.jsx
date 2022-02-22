@@ -9,6 +9,7 @@ import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useState } from 'react';
 import { Button, Caption, Card, Paragraph, Title } from 'react-native-paper';
+import { CommonActions } from '@react-navigation/native';
 
 const UserDetailsScreen = ({ route, navigation }) => {
 
@@ -33,7 +34,12 @@ const UserDetailsScreen = ({ route, navigation }) => {
       }).then(data => setPostData(data.data)).catch(err => console.log(err))
     }
     fetchData();
-  }, [setProfileData, user.rerender]);
+
+    // return () => {
+    //   setProfileData('');
+    //   setPostData('');
+    // }
+  }, [setProfileData, setPostData, user.rerender]);
 
   const likePost = (id) => {
     axios.post(`${API_URL}/user/${route.params.id}/post/${id}/like`, {}, {
@@ -60,7 +66,13 @@ const UserDetailsScreen = ({ route, navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
 
         <View style={styles.header}>
-          <MaterialIcons name="keyboard-backspace" size={24} color="#52575D" onPress={() => navigation.goBack({ key: 'Friends' })} />
+          <MaterialIcons name="keyboard-backspace" size={24} color="#52575D" onPress={() => {
+            navigation.dispatch(CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Friends' }]
+            }))
+          }}
+          />
         </View>
 
         <View style={{ alignSelf: "center" }}>
@@ -121,7 +133,8 @@ const UserDetailsScreen = ({ route, navigation }) => {
                   </Card>
                 </View>
               </View>
-            )}
+            )
+          }
           )}
         </View>
 
