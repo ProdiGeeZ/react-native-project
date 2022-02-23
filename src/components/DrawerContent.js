@@ -88,7 +88,7 @@ const DrawerContent = (props) => {
             <Drawer.Item
               icon="home"
               label="Home"
-              onPress={() => { props.navigation.navigate('Feed') }}
+              onPress={() => { props.navigation.navigate('Space Book') }}
             />
             <Drawer.Item
               icon="account-circle"
