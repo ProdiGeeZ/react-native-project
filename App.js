@@ -6,14 +6,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NativeBaseProvider } from 'native-base';
 
+import { UserProvider } from './src/context/UserContext';
 
-import Home from './src/screens/Home';
+import DrawerContent from './src/components/DrawerContent';
+import TabRoutes from './src/components/TabContent';
+
 import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
-import DrawerContent from './src/components/DrawerContent';
-
-
-import { UserProvider } from './src/context/UserContext';
 import SettingsScreen from './src/screens/SettingsScreen';
 import FriendRequestScreen from './src/screens/FriendRequest';
 import FriendsScreen from './src/screens/FriendsScreen';
@@ -22,12 +21,14 @@ import UserDetailsScreen from './src/screens/UserDetailsScreen';
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-function DrawerRoutes() {
+const DrawerRoutes = () => {
   return (
-    <Drawer.Navigator
+    <Drawer.Navigator screenOptions={{
+      drawerType: 'push-screen'
+    }}
       drawerContent={props => <DrawerContent {...props} />}
     >
-      <Drawer.Screen name="Feed" component={Home} />
+      <Drawer.Screen name="Space Book" component={TabRoutes} />
       <Drawer.Screen name="Settings" component={SettingsScreen} />
       <Drawer.Screen name="Friend Requests" component={FriendRequestScreen} />
       <Drawer.Screen name="Friends" component={FriendsScreen} />
@@ -35,6 +36,7 @@ function DrawerRoutes() {
     </Drawer.Navigator>
   )
 }
+
 
 export default function App() {
   return (
@@ -50,7 +52,6 @@ export default function App() {
             <Stack.Screen name="Home" component={DrawerRoutes} />
           </Stack.Navigator>
         </NavigationContainer>
-
       </NativeBaseProvider>
     </UserProvider>
   );
@@ -59,6 +60,6 @@ export default function App() {
 const styles = StyleSheet.create({
   root: {
     // flex: 1,
-    backgroundColor: '#F9FbFc'
+    backgroundColor: '#ff8f73'
   }
 });

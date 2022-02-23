@@ -88,12 +88,12 @@ const DrawerContent = (props) => {
             <Drawer.Item
               icon="home"
               label="Home"
-              onPress={() => { props.navigation.navigate('Feed') }}
+              onPress={() => { props.navigation.navigate('Space Book') }}
             />
             <Drawer.Item
               icon="account-circle"
               label="Profile"
-              onPress={() => { props.navigation.navigate('Profile') }}
+              onPress={() => { props.navigation.navigate('User', { id }) }}
             />
             <Drawer.Item
               icon="account-box-multiple"

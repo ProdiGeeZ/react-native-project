@@ -8,7 +8,8 @@ import { API_URL } from '../../consts.json'
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import { useState } from 'react';
-import { Button, Caption, Card, Paragraph, Title } from 'react-native-paper';
+import { Badge, Button, Caption, Card, List, Paragraph, Title } from 'react-native-paper';
+import { CommonActions } from '@react-navigation/native';
 
 const UserDetailsScreen = ({ route, navigation }) => {
 
@@ -33,7 +34,12 @@ const UserDetailsScreen = ({ route, navigation }) => {
       }).then(data => setPostData(data.data)).catch(err => console.log(err))
     }
     fetchData();
-  }, [setProfileData, user.rerender]);
+
+    // return () => {
+    //   setProfileData('');
+    //   setPostData('');
+    // }
+  }, [setProfileData, setPostData, user.rerender]);
 
   const likePost = (id) => {
     axios.post(`${API_URL}/user/${route.params.id}/post/${id}/like`, {}, {
@@ -60,7 +66,13 @@ const UserDetailsScreen = ({ route, navigation }) => {
       <ScrollView showsVerticalScrollIndicator={false}>
 
         <View style={styles.header}>
-          <MaterialIcons name="keyboard-backspace" size={24} color="#52575D" onPress={() => navigation.goBack({ key: 'Friends' })} />
+          <MaterialIcons name="keyboard-backspace" size={24} color="#52575D" onPress={() => {
+            navigation.dispatch(CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Friends' }]
+            }))
+          }}
+          />
         </View>
 
         <View style={{ alignSelf: "center" }}>
@@ -99,15 +111,32 @@ const UserDetailsScreen = ({ route, navigation }) => {
               <View style={styles.recentItem}>
                 <View style={{ width: 350 }}>
                   <Card key={posts.post_}>
+                    <Card.Title />
                     <Card.Content>
                       <Title>{posts.author.first_name} wrote: </Title>
                       <Paragraph style={[styles.text, styles.activityText]}>
                         {posts.text}
                       </Paragraph>
-                      <Text style={{ alignSelf: 'flex-end' }}>
-                        {`${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} @ ${date.getHours()}:${date.getMinutes()}`}
-                      </Text>
-                      <Caption> {posts.numLikes} Likes </Caption>
+                      <Text>{' '}</Text>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ alignItems: 'center', flexDirection: 'row' }}>
+                          <View style={{
+                            backgroundColor: '#1878f3',
+                            width: 20,
+                            height: 20,
+                            borderRadius: 10,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: 6,
+                          }}>
+                            <AntDesign name='like2' size={12} color='white' />
+                          </View>
+                          <Text>  {posts.numLikes} Likes </Text>
+                        </View>
+                        <Text style={{ alignItems: 'flex-end' }}>
+                          {`${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} @ ${date.getHours()}:${date.getMinutes()}`}
+                        </Text>
+                      </View>
 
                       <Card.Actions>
                         <TouchableOpacity onPress={() => likePost(posts.post_id)}>
@@ -121,7 +150,8 @@ const UserDetailsScreen = ({ route, navigation }) => {
                   </Card>
                 </View>
               </View>
-            )}
+            )
+          }
           )}
         </View>
 
