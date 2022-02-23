@@ -40,7 +40,9 @@ const FriendsScreen = ({ navigation }) => {
         <Text style={{ textAlign: 'center' }}>Your Friends:</Text>
 
         {friends.length > 0 ? friends.map((friend) => (
-          <TouchableOpacity onPress={() => navigation.navigate('User', { id: friend.user_id })}>
+          <TouchableOpacity
+            key={friend.user_id}
+            onPress={() => navigation.navigate('User', { id: friend.user_id })}>
             <List.Item
               title={`${friend.user_givenname} ${friend.user_familyname}`}
               description={friend.user_email}
