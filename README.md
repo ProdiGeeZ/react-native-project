@@ -1,1 +1,1 @@
-# 1CKW100 - React Native App (Spacebook)
+# 1CKW100 - React Native App
