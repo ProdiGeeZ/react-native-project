@@ -10,6 +10,8 @@ export const UserProvider = ({ children }) => {
   const [password, setPassword] = useState('');
   const [rerender, setRerender] = useState(false);
   const [details, setDetails] = useState({ profile: {}, photo: '' });
+  const [friends, setFriends] = useState([]);
+
 
   return (
     <UserContext.Provider
@@ -18,7 +20,9 @@ export const UserProvider = ({ children }) => {
         id,
         password,
         rerender,
+        friends,
         setRerender,
+        setFriends,
         setDetails,
         setId,
         setPassword,

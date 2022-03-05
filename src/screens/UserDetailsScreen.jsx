@@ -65,16 +65,6 @@ const UserDetailsScreen = ({ route, navigation }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
 
-        <View style={styles.header}>
-          <MaterialIcons name="keyboard-backspace" size={24} color="#52575D" onPress={() => {
-            navigation.dispatch(CommonActions.reset({
-              index: 0,
-              routes: [{ name: 'Friends' }]
-            }))
-          }}
-          />
-        </View>
-
         <View style={{ alignSelf: "center" }}>
           <View style={styles.profileImage}>
             <Image
@@ -96,9 +86,14 @@ const UserDetailsScreen = ({ route, navigation }) => {
             <Text style={[styles.text, { fontSize: 22 }]}>{postData.length}</Text>
             <Text style={[styles.text, styles.subTitle]}>Posts</Text>
           </View>
-          <View style={[styles.profileInfo, { borderColor: "#ff8f73", borderLeftWidth: 1, borderRightWidth: 1 }]}>
-            <Text style={[styles.text, { fontSize: 22 }]}>{profileData.friend_count}</Text>
-            <Text style={[styles.text, styles.subTitle]}>Friends</Text>
+          <View style={[styles.profileInfo, { borderColor: "#ff8f73", borderLeftWidth: 1, borderRightWidth: 1 }]} >
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Friends')}
+              style={[styles.profileInfo]}
+            >
+              <Text style={[styles.text, { fontSize: 22 }]}>{profileData.friend_count}</Text>
+              <Text style={[styles.text, styles.subTitle]}>Friends</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -189,12 +184,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF"
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 24,
-    marginHorizontal: 16
   },
   image: {
     flex: 1,
