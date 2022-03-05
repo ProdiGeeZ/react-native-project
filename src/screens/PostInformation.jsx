@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
-import { Button, Card, Paragraph, Title, Dialog, Portal } from 'react-native-paper';
+import { Button, Card, Paragraph, Title, Dialog, Portal, TextInput } from 'react-native-paper';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base'
 import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
+import { useState } from 'react';
 
 const PostInformation = ({ route, posts, date, visible, setVisible }) => {
 
+  const [text, setText] = useState(posts.text);
   const user = useContext(UserContext);
 
   const likePost = async (id) => {
@@ -50,10 +52,20 @@ const PostInformation = ({ route, posts, date, visible, setVisible }) => {
     user.setRerender(!user.rerender);
   }
 
+  const updatePost = (post_id) => {
+    axios.patch(`${API_URL}/user/${route.params.id}/post/${post_id}`, { text }, {
+      headers: {
+        'X-Authorization': user.token,
+        'Content-Type': 'application/json'
+      }
+    })
+    setVisible(!visible);
+    user.setRerender(!user.rerender);
+  }
   return (
     <View style={styles.recentItem}>
       <View style={{ width: 350 }}>
-        <Card key={posts.post_}>
+        <Card key={posts.post_id}>
           <Card.Content>
             {isOwnPost(posts.author.user_id) ? (
               <>
@@ -62,13 +74,20 @@ const PostInformation = ({ route, posts, date, visible, setVisible }) => {
                 </TouchableOpacity>
                 <Portal>
                   <Dialog visible={visible} onDismiss={() => setVisible(!visible)}>
-                    <Dialog.Title>Post Settings</Dialog.Title>
+                    <Dialog.Title>Edit Post</Dialog.Title>
                     <Dialog.Content>
-                      <Paragraph>{ }</Paragraph>
+                      <TextInput
+                        mode='outline'
+                        value={text}
+                        onChangeText={text => setText(text)}
+                      />
                     </Dialog.Content>
-                    <Dialog.Actions>
-                      <Button color='red' onPress={() => deletePost(posts.post_id)}>Delete Post</Button>
-                      <Button onPress={() => setVisible(!visible)}>Cancel</Button>
+                    <Dialog.Actions >
+                      <View style={{ flexDirection: 'row' }}>
+                        <Button style={{ alignItems: 'flex-start' }} color='red' onPress={() => deletePost(posts.post_id)}>Delete Post</Button>
+                        <Button color='green' onPress={() => updatePost(posts.post_id)}>Update Post</Button>
+                        <Button onPress={() => setVisible(!visible)}>Cancel</Button>
+                      </View>
                     </Dialog.Actions>
                   </Dialog>
                 </Portal>
