@@ -91,16 +91,6 @@ const DrawerContent = (props) => {
               onPress={() => { props.navigation.navigate('Space Book') }}
             />
             <Drawer.Item
-              icon="account-circle"
-              label="Profile"
-              onPress={() => { props.navigation.navigate('User', { id }) }}
-            />
-            <Drawer.Item
-              icon="account-box-multiple"
-              label="Friend Requests"
-              onPress={() => { props.navigation.navigate('Friend Requests') }}
-            />
-            <Drawer.Item
               label="Settings"
               icon='cog'
               onPress={() => { props.navigation.navigate('Settings', { screen: 'SettingsScreen' }); }}
