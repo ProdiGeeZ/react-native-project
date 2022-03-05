@@ -7,7 +7,7 @@ import { UserContext } from '../context/UserContext';
 import Home from '../screens/Home';
 import SearchScreen from '../screens/SearchScreen';
 import PostScreen from '../screens/PostScreen';
-import FriendsScreen from '../screens/FriendsScreen';
+import FriendRequestScreen from '../screens/FriendRequest';
 import UserDetailsScreen from '../screens/UserDetailsScreen';
 
 
@@ -103,7 +103,7 @@ const TabRoutes = () => {
             <CustomTabBarButton {...props} />
           )
         }} />
-      <Tab.Screen name="Friends" component={FriendsScreen}
+      <Tab.Screen name="Friend Requests" component={FriendRequestScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={{ alignItems: 'center', justifyContent: 'center', top: 2.5 }}>
@@ -115,7 +115,7 @@ const TabRoutes = () => {
                   tintColor: focused ? '#e32f45' : '#F3ABB4'
                 }} />
               <Text style={{ color: focused ? '#e32f45' : '#000000', fontSize: 12 }}>
-                FRIENDS
+                FRIEND REQUESTS
               </Text>
             </View>
           )
