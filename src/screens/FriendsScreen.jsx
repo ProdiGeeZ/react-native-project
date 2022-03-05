@@ -9,7 +9,6 @@ import { Avatar, List, Text } from 'react-native-paper';
 const FriendsScreen = ({ navigation }) => {
 
   const user = useContext(UserContext);
-  const [friends, setFriends] = useState([]);
 
   const getProfilePhoto = (id) => {
     const resp = axios.get(`${API_URL}/user/${id}/photo`, {
@@ -22,24 +21,13 @@ const FriendsScreen = ({ navigation }) => {
     return resp.data;
   }
 
-  useEffect(() => {
-    axios.get(`${API_URL}/user/${user.id}/friends`, {
-      headers: {
-        'X-Authorization': user.token,
-        'Content-Type': 'application/json'
-      }
-    }).then(data => setFriends(data.data))
-      .catch(err => console.log(err))
-  }, [user.rerender]);
-
-
   return (
     <View style={styles.root}>
       <View>
 
         <Text style={{ textAlign: 'center' }}>Your Friends:</Text>
 
-        {friends.length > 0 ? friends.map((friend) => (
+        {user.friends.length > 0 ? user.friends.map((friend) => (
           <TouchableOpacity
             key={friend.user_id}
             onPress={() => navigation.navigate('User', { id: friend.user_id })}>
