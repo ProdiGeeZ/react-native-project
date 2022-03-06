@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Card, Paragraph, Title, Dialog, Portal, TextInput } from 'react-native-paper';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base'
@@ -6,12 +6,12 @@ import { AntDesign } from '@expo/vector-icons';
 import axios from 'axios';
 import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
-import { useState } from 'react';
 
-const PostInformation = ({ route, posts, date, visible, setVisible }) => {
+const PostInformation = ({ route, posts, date }) => {
 
-  const [text, setText] = useState(posts.text);
+  const [visible, setVisible] = useState(false);
   const user = useContext(UserContext);
+  const [text, setText] = useState(posts.text);
 
   const likePost = async (id) => {
     console.log(route)
