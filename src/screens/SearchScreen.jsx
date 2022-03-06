@@ -10,8 +10,7 @@ const SearchScreen = () => {
   const [friendData, setFriendData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = query => setSearchQuery(query);
-  const user = useContext(UserContext);
-  const { token, friends } = user;
+  const { token, friends, id } = useContext(UserContext);
 
   useEffect(() => {
     axios.get(`${API_URL}/search`, {
@@ -59,17 +58,19 @@ const SearchScreen = () => {
           <DataTable.Title>Add Friend</DataTable.Title>
         </DataTable.Header>
 
-        {friendData.map((user) => (
-          <DataTable.Row key={user.user_id}>
-            <DataTable.Cell>{user.user_givenname}</DataTable.Cell>
-            <DataTable.Cell>{user.user_familyname}</DataTable.Cell>
-            <DataTable.Cell>
-              <TouchableOpacity onPress={() => addFriend(user.user_id)}>
-                {isFriend(user.user_id)}
-              </TouchableOpacity>
-            </DataTable.Cell>
-          </DataTable.Row>
-        ))}
+        {friendData
+          .filter((data) => data.user_id !== id)
+          .map((user) => (
+            <DataTable.Row key={user.user_id}>
+              <DataTable.Cell>{user.user_givenname}</DataTable.Cell>
+              <DataTable.Cell>{user.user_familyname}</DataTable.Cell>
+              <DataTable.Cell>
+                <TouchableOpacity onPress={() => addFriend(user.user_id)}>
+                  {isFriend(user.user_id)}
+                </TouchableOpacity>
+              </DataTable.Cell>
+            </DataTable.Row>
+          ))}
 
       </DataTable>
     </ScrollView>
