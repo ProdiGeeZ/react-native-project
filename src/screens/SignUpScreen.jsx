@@ -8,9 +8,7 @@ import { FormControl, Icon, Input, WarningOutlineIcon, Button, ScrollView } from
 import { MaterialIcons, Entypo } from "@expo/vector-icons";
 import { UserContext } from "../context/UserContext";
 
-const SignUpScreen = ({
-  navigation,
-}) => {
+const SignUpScreen = ({ navigation }) => {
 
   const user = useContext(UserContext);
 

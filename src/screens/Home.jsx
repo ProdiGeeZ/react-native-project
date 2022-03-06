@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Button, ScrollView, Text, View } from "native-base";
+import { Button, ScrollView, View } from "native-base";
 import React, { useEffect, useState, useContext } from "react";
 import { StyleSheet, TextInput } from "react-native";
 import { API_URL } from '../../consts.json';

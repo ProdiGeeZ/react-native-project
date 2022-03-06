@@ -1,16 +1,14 @@
 import axios from 'axios';
 import { View, Text } from 'native-base';
 import React, { useContext, useEffect, useState } from 'react';
-import { useCallback } from 'react';
-import { List, Badge, TouchableRipple } from 'react-native-paper';
+import { List, TouchableRipple } from 'react-native-paper';
 
 import { API_URL } from '../../consts.json';
 import { UserContext } from '../context/UserContext';
 
 const FriendRequestScreen = () => {
   const [friends, setFriends] = useState([]);
-  const user = useContext(UserContext);
-  const { rerender, setRerender, token } = user;
+  const { rerender, setRerender, token } = useContext(UserContext);
 
   useEffect(() => {
     axios.get(`${API_URL}/friendrequests`, {
