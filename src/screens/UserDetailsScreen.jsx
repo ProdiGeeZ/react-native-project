@@ -12,7 +12,6 @@ const UserDetailsScreen = ({ route, navigation }) => {
   const user = useContext(UserContext);
   const [profileData, setProfileData] = useState('');
   const [postData, setPostData] = useState([]);
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,8 +80,6 @@ const UserDetailsScreen = ({ route, navigation }) => {
                   key={posts.id}
                   posts={posts}
                   date={date}
-                  visible={visible}
-                  setVisible={setVisible}
                 />
               )
             }
