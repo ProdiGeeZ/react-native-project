@@ -9,7 +9,6 @@ const FloatingButton = (props) => {
   const animation = useRef(new Animated.Value(0)).current;
 
   const toggleMenu = () => {
-    console.log('hellllooo');
     const toValue = open ? 0 : 1;
     Animated.spring(animation, {
       toValue,

@@ -53,7 +53,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
       <Provider>
         <ScrollView showsVerticalScrollIndicator={false}>
 
-          <View style={{ alignSelf: "center" }}>
+          <View style={{ alignSelf: "center" }} key={user.id}>
             <View style={styles.profileImage}>
               <Image
                 alt='profile image'
