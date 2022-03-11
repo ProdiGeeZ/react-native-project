@@ -73,7 +73,7 @@ const CameraComponent = ({ hasPermission, setHasPermission }) => {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => takePicture()}>
-                <Text style={styles.text}> Take Photo </Text>
+                <Text style={[styles.text, { alignSelf: 'flex-end' }]}> Take Photo </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -87,7 +87,7 @@ const CameraComponent = ({ hasPermission, setHasPermission }) => {
 
 const styles = StyleSheet.create({
   button: {
-    flex: 0.1,
+    flex: 0,
     alignSelf: 'flex-end',
     alignItems: 'center',
   },
@@ -114,7 +114,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    fontSize: 18,
+    fontSize: 22,
+    textAlign: 'center',
+    alignItems: 'center',
     color: 'white',
   }
 })

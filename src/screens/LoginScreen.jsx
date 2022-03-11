@@ -23,7 +23,7 @@ const LoginScreen = ({ navigation }) => {
 				await user.setToken(data.token);
 				await user.setId(data.id);
 				console.log(`done - heres the token ${user.token} ${user.id}`);
-				navigation.navigate('Home');
+				navigation.navigate('Welcome');
 			}).catch(async (err) => {
 				console.log(err);
 				await setError(!error);

@@ -17,7 +17,6 @@ const FriendsScreen = ({ navigation }) => {
         'Content-Type': 'application/json'
       }
     });
-    console.log(resp.data)
     return resp.data;
   }
 

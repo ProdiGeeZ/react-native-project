@@ -88,7 +88,6 @@ const SettingsScreen = () => {
         },
         ...prevState.photo
       }));
-      console.log(details);
     }).catch((err) => setError(true))
   };
 
