@@ -17,23 +17,27 @@ import SettingsScreen from './src/screens/SettingsScreen';
 import FriendRequestScreen from './src/screens/FriendRequest';
 import FriendsScreen from './src/screens/FriendsScreen';
 import UserDetailsScreen from './src/screens/UserDetailsScreen';
+import FloatingButton from './src/components/FloatingButton';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const DrawerRoutes = () => {
   return (
-    <Drawer.Navigator screenOptions={{
-      drawerType: 'push-screen'
-    }}
-      drawerContent={props => <DrawerContent {...props} />}
-    >
-      <Drawer.Screen name="Space Book" component={TabRoutes} />
-      <Drawer.Screen name="Settings" component={SettingsScreen} />
-      <Drawer.Screen name="Friend Requests" component={FriendRequestScreen} />
-      <Drawer.Screen name="Friends" component={FriendsScreen} />
-      <Drawer.Screen name="User" component={UserDetailsScreen} />
-    </Drawer.Navigator>
+    <>
+      <Drawer.Navigator screenOptions={{
+        drawerType: 'push-screen'
+      }}
+        drawerContent={props => <DrawerContent {...props} />}
+      >
+        {/* <Drawer.Screen name="Space Book" component={TabRoutes} /> */}
+        <Drawer.Screen name="Settings" component={SettingsScreen} />
+        <Drawer.Screen name="Friend Requests" component={FriendRequestScreen} />
+        <Drawer.Screen name="Friends" component={FriendsScreen} />
+        <Drawer.Screen name="User" component={UserDetailsScreen} />
+      </Drawer.Navigator>
+      <FloatingButton style={{ bottom: 100, alignSelf: 'center', position: 'absolute' }} />
+    </>
   )
 }
 
