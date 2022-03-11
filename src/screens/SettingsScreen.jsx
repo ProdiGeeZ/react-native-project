@@ -10,12 +10,14 @@ import {
 import { FormControl, Input, WarningOutlineIcon } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import { Camera } from 'expo-camera'
 import BottomSheet from 'reanimated-bottom-sheet';
 import Animated from 'react-native-reanimated';
 import axios from 'axios';
 
 import { UserContext } from '../context/UserContext';
 import { API_URL } from '../../consts.json'
+import CameraComponent from './CameraComponent';
 
 const SettingsScreen = () => {
   const user = useContext(UserContext);
@@ -27,20 +29,24 @@ const SettingsScreen = () => {
   const [updatedEmail, setEmail] = useState(email);
   const [updatedPassword, setPassword] = useState(password);
   const [err, setError] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
 
   const bottompanel = createRef();
   const fall = new Animated.Value(1);
+
+  const launchCam = async () => {
+    const { status } = await Camera.requestCameraPermissionsAsync();
+    setHasPermission(status === 'granted');
+  };
 
   const renderContent = () => (
     <View style={styles.uploadPanel}>
       <View style={{ alignItems: 'center' }}>
         <Text style={{ fontSize: 27, height: 35 }}>Upload Photo</Text>
         <Text style={styles.panelSubtitle}>Choose your profile photo</Text>
-        <TouchableOpacity style={styles.panelButton}>
+        <TouchableOpacity style={styles.panelButton}
+          onPress={launchCam}>
           <Text style={styles.panelButtonTitle}>Take photo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.panelButton}>
-          <Text style={styles.panelButtonTitle}>Choose from Library</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.panelButton}
@@ -87,7 +93,7 @@ const SettingsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
+    hasPermission ? <CameraComponent hasPermission={hasPermission} setHasPermission={setHasPermission} /> : <View style={styles.container}>
       <BottomSheet
         callbackNode={fall}
         enabledGestureInteraction
@@ -107,8 +113,7 @@ const SettingsScreen = () => {
             <View style={styles.profileContainer}>
               <ImageBackground
                 source={{
-                  // TODO: get from props
-                  uri: ''
+                  uri: details.photo
                 }}
                 style={styles.profilePicture}
                 imageStyle={{ borderRadius: 15 }}>
