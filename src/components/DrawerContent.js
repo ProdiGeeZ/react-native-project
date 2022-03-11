@@ -18,8 +18,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 const DrawerContent = (props) => {
 
   const user = useContext(UserContext);
-  const { id, token, details, setDetails, rerender } = user;
-  const [photo, setPhoto] = useState(null);
+  const { id, token, details, setDetails, rerender, profilePic, setProfilePic } = user;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +29,7 @@ const DrawerContent = (props) => {
         }
       });
 
-      const userProfilePhoto = await fetch(`${API_URL}/user/${id}/photo`, {
+      await fetch(`${API_URL}/user/${id}/photo`, {
         method: 'GET',
         headers: {
           'X-Authorization': token,
@@ -42,9 +41,10 @@ const DrawerContent = (props) => {
           reader.readAsDataURL(blob);
           reader.onloadend = function () {
             reader.result;
+            setProfilePic(reader.result)
           }
         })
-      setDetails({ profile: userProfileGlobal.data, photo: userProfilePhoto });
+      setDetails({ profile: userProfileGlobal.data});
     };
     fetchData();
   }, [id, token, rerender]);
@@ -74,7 +74,7 @@ const DrawerContent = (props) => {
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
               <Avatar.Image
                 source={{
-                  uri: details.photo
+                  uri: profilePic
                 }}
                 size={50}
               />
@@ -94,11 +94,11 @@ const DrawerContent = (props) => {
             </View>
           </View>
           <Drawer.Section style={styles.drawerSection}>
-            <Drawer.Item
-              icon="home"
-              label="Home"
-              onPress={() => { props.navigation.navigate('Space Book') }}
-            />
+          <Drawer.Item
+              icon="account"
+              label="Profile"
+              onPress={() => { props.navigation.navigate('User', { id } ) }}
+            />  
             <Drawer.Item
               label="Settings"
               icon='cog'
