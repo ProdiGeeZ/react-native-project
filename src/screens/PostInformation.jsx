@@ -14,7 +14,6 @@ const PostInformation = ({ route, posts, date }) => {
   const [text, setText] = useState(posts.text);
 
   const likePost = async (id) => {
-    console.log(route)
     await axios.post(`${API_URL}/user/${route.params.id}/post/${id}/like`, {}, {
       headers: {
         'X-Authorization': user.token,

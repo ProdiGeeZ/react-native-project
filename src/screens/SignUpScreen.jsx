@@ -20,11 +20,10 @@ const SignUpScreen = ({ navigation }) => {
   const [error, setError] = useState(false);
 
   const onRegisterPressed = async () => {
-    console.log('onSignup pressed');
     await setError(false);
     axios.post(`${API_URL}/user`, { first_name: firstName, last_name: lastName, email, password })
       .then(async ({ data }) => {
-        console.log(`hello - ${data.id}`);
+        console.log(`ID - ${data.id}`);
         await user.setId(data.id);
         navigation.goBack();
       }).catch(async (err) => {
