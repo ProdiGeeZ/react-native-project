@@ -19,10 +19,11 @@ const UserDetailsScreen = ({ route, navigation }) => {
   const isFocused = useIsFocused();
   const wipeData = () => {
     setProfileData('');
-    setPostData('');
+    setPostData([]);
   }
   useEffect(() => {
     console.log({isFocused})
+    console.log(route.params.id)
     const fetchData = async () => {
       await axios.get(`${API_URL}/user/${route.params.id}`, {
         headers: {
@@ -58,7 +59,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
         })
     }
     isFocused ? fetchData() : wipeData();
-  }, [setProfileData, setPostData, rerender, setProfilePic, isFocused]);
+  }, [setProfileData, setPostData, rerender, isFocused]);
 
   console.log({profileData})
 

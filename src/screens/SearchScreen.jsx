@@ -63,8 +63,8 @@ const SearchScreen = () => {
         {friendData
           .filter((data) => data.user_id !== id)
           .map((user) => (
-            <TouchableOpacity onPress={() => navigation.navigate('User', {id: user.user_id})}>
-            <DataTable.Row key={user.user_id}>
+            <TouchableOpacity key={user.user_id} onPress={() => navigation.navigate('User', {id: user.user_id})}>
+            <DataTable.Row  >
               <DataTable.Cell>{user.user_givenname}</DataTable.Cell>
               <DataTable.Cell>{user.user_familyname}</DataTable.Cell>
               <DataTable.Cell>
