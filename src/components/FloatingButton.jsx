@@ -1,36 +1,74 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { View, StyleSheet, Animated, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { FAB } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+import { UserContext } from '../context/UserContext';
 const FloatingButton = (props) => {
 
-  const [open, setOpen] = useState(true);
-
-  const animation = useRef(new Animated.Value(0)).current;
+  const [isOpen, setIsOpen] = useState(true);
+  const toggleAnimation = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation(); 
+  const {id} = useContext(UserContext);
 
   const toggleMenu = () => {
-    const toValue = open ? 0 : 1;
-    Animated.spring(animation, {
+    const toValue = isOpen ? 0 : 1;
+    Animated.spring(toggleAnimation, {
       toValue,
-      friction: 5,
-      useNativeDriver: true
+      friction: 10,
+      useNativeDriver: false
     }).start();
 
-    setOpen(!open);
+    setIsOpen(!isOpen);
   }
 
-  const opacity = animation.interpolate({
+  const opacity = toggleAnimation.interpolate({
     inputRange: [0, 0.5, 1],
     outputRange: [0, 0, 1]
   })
 
-  const postStyle = {
+  const postsStyle = {
     transform: [
-      { scale: animation },
+      { scale: toggleAnimation },
       {
-        translateY: animation.interpolate({
+        translateY: toggleAnimation.interpolate({
           inputRange: [0, 1],
-          outputRange: [0, -80]
+          outputRange: [0, -240]
+        })
+      }
+    ]
+  }
+
+  const friendsStyle = {
+    transform: [
+      { scale: toggleAnimation },
+      {
+        translateY: toggleAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -180]
+        })
+      }
+    ]
+  }
+
+  const searchStyle = {
+    transform: [
+      { scale: toggleAnimation },
+      {
+        translateY: toggleAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -120]
+        })
+      }
+    ]
+  }
+
+  const profileStyle = {
+    transform: [
+      { scale: toggleAnimation },
+      {
+        translateY: toggleAnimation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, -60]
         })
       }
     ]
@@ -39,7 +77,7 @@ const FloatingButton = (props) => {
   const rotation = {
     transform: [
       {
-        rotate: animation.interpolate({
+        rotate: toggleAnimation.interpolate({
           inputRange: [0, 1],
           outputRange: ["0deg", "45deg"]
         })
@@ -47,29 +85,35 @@ const FloatingButton = (props) => {
     ]
   }
 
+  const navigateTo = (location, userID) => {
+    toggleMenu();
+    const id = userID || {};
+    navigation.navigate(location, {id});
+  }
+
   return (
     <View style={[styles.container, props.style]}>
 
-      <TouchableWithoutFeedback>
-        <Animated.View style={[styles.button, styles.secondary, opacity]}>
+      <TouchableWithoutFeedback onPress={() => navigateTo('Home')}>
+        <Animated.View style={[styles.button, styles.secondary, postsStyle, opacity]}>
           <AntDesign name="addfile" size={20} color="#FA2A4B" />
         </Animated.View>
       </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback>
-        <Animated.View style={[styles.button, styles.secondary, opacity]}>
+      <TouchableWithoutFeedback onPress={() => navigateTo('Friend Requests')}>
+        <Animated.View style={[styles.button, styles.secondary, friendsStyle, opacity]}>
           <AntDesign name="addusergroup" size={20} color="#FA2A4B" />
         </Animated.View>
       </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback>
-        <Animated.View style={[styles.button, styles.secondary, opacity]}>
+      <TouchableWithoutFeedback onPress={() => navigateTo('Search')}>
+        <Animated.View style={[styles.button, styles.secondary, searchStyle, opacity]}>
           <AntDesign name="search1" size={20} color="#FA2A4B" />
         </Animated.View>
       </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback>
-        <Animated.View style={[styles.button, styles.secondary, postStyle, opacity]}>
+      <TouchableWithoutFeedback onPress={() => navigateTo('User', id)}>
+        <Animated.View style={[styles.button, styles.secondary, profileStyle, opacity]}>
           <AntDesign name="user" size={20} color="#FA2A4B" />
         </Animated.View>
       </TouchableWithoutFeedback>
@@ -80,15 +124,6 @@ const FloatingButton = (props) => {
           <AntDesign name="plus" size={24} color="#FFF" />
         </Animated.View>
       </TouchableWithoutFeedback>
-
-      <FAB
-        visible={!open}
-        onPress={() => setOpen(!open)}
-        placement="left"
-        title="Show"
-        icon={{ name: 'edit', color: 'red' }}
-        color="green"
-      />
     </View >
   )
 };

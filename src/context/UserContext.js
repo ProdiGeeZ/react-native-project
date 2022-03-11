@@ -9,8 +9,9 @@ export const UserProvider = ({ children }) => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [rerender, setRerender] = useState(false);
-  const [details, setDetails] = useState({ profile: {}, photo: '' });
+  const [details, setDetails] = useState({ profile: {}});
   const [friends, setFriends] = useState([]);
+  const [profilePic, setProfilePic] = useState(null);
 
 
   return (
@@ -21,6 +22,8 @@ export const UserProvider = ({ children }) => {
         password,
         rerender,
         friends,
+        profilePic, 
+        setProfilePic,
         setRerender,
         setFriends,
         setDetails,

@@ -6,26 +6,29 @@ import axios from 'axios';
 import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
 import PostInformation from './PostInformation';
+import { useIsFocused } from '@react-navigation/native';
 
 const UserDetailsScreen = ({ route, navigation }) => {
 
-  const user = useContext(UserContext);
+  const {token, id, rerender} = useContext(UserContext);
   const [profileData, setProfileData] = useState('');
   const [postData, setPostData] = useState([]);
   const [profilePic, setProfilePic] = useState(null)
 
+  const isFocused = useIsFocused();
   useEffect(() => {
+    console.log({isFocused})
     const fetchData = async () => {
       await axios.get(`${API_URL}/user/${route.params.id}`, {
         headers: {
-          'X-Authorization': user.token,
+          'X-Authorization': token,
           'Content-Type': 'application/json'
         }
       }).then(data => setProfileData(data.data)).catch(err => console.log(err))
 
       await axios.get(`${API_URL}/user/${route.params.id}/post`, {
         headers: {
-          'X-Authorization': user.token,
+          'X-Authorization': token,
           'Content-Type': 'application/json'
         }
       }).then(data => setPostData(data.data)).catch(err => console.log(err))
@@ -33,7 +36,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
       await fetch(`${API_URL}/user/${route.params.id}/photo`, {
         method: 'GET',
         headers: {
-          'X-Authorization': user.token,
+          'X-Authorization': token,
         }
       }).then(res => res.blob())
         .then(resBlob => {
@@ -45,19 +48,19 @@ const UserDetailsScreen = ({ route, navigation }) => {
           }
         })
     }
-    fetchData();
-  }, [setProfileData, setPostData, user.rerender, setProfilePic]);
+    isFocused ? fetchData() : setProfileData({})
+  }, [setProfileData, setPostData, rerender, setProfilePic, isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
       <Provider>
         <ScrollView showsVerticalScrollIndicator={false}>
 
-          <View style={{ alignSelf: "center" }} key={user.id}>
+          <View style={{ alignSelf: "center" }} key={id}>
             <View style={styles.profileImage}>
               <Image
                 alt='profile image'
-                source={{ uri: profilePic ? profilePic : 'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png' }}
+                source={{ uri: profilePic ||  'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png' }}
                 style={styles.image}
                 resizeMode="center" />
             </View>
@@ -76,7 +79,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
             </View>
             <View style={[styles.profileInfo, { borderColor: "#ff8f73", borderLeftWidth: 1, borderRightWidth: 1 }]} >
               <TouchableOpacity
-                onPress={() => navigation.navigate('Friends')}
+                onPress={() => navigation.reset({index:0, routes:[{name: 'Friends'}]})}
                 style={[styles.profileInfo]}
               >
                 <Text style={[styles.text, { fontSize: 22 }]}>{profileData.friend_count}</Text>
