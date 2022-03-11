@@ -9,8 +9,8 @@ import { UserContext } from '../context/UserContext';
 
 const PostInformation = ({ route, posts, date }) => {
 
-  const [visible, setVisible] = useState(false);
   const user = useContext(UserContext);
+  const [visible, setVisible] = useState(false);
   const [text, setText] = useState(posts.text);
 
   const likePost = async (id) => {

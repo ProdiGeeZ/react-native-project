@@ -12,6 +12,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
   const user = useContext(UserContext);
   const [profileData, setProfileData] = useState('');
   const [postData, setPostData] = useState([]);
+  const [profilePic, setProfilePic] = useState(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,9 +29,24 @@ const UserDetailsScreen = ({ route, navigation }) => {
           'Content-Type': 'application/json'
         }
       }).then(data => setPostData(data.data)).catch(err => console.log(err))
+
+      await fetch(`${API_URL}/user/${route.params.id}/photo`, {
+        method: 'GET',
+        headers: {
+          'X-Authorization': user.token,
+        }
+      }).then(res => res.blob())
+        .then(resBlob => {
+          let blob = new Blob([resBlob], { type: 'image/png' })
+          let reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = function () {
+            setProfilePic(reader.result);
+          }
+        })
     }
     fetchData();
-  }, [setProfileData, setPostData, user.rerender]);
+  }, [setProfileData, setPostData, user.rerender, setProfilePic]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -41,7 +57,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
             <View style={styles.profileImage}>
               <Image
                 alt='profile image'
-                source={{ uri: 'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png' }}
+                source={{ uri: profilePic ? profilePic : 'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png' }}
                 style={styles.image}
                 resizeMode="center" />
             </View>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { View, StyleSheet } from 'react-native';
 import {
@@ -19,6 +19,7 @@ const DrawerContent = (props) => {
 
   const user = useContext(UserContext);
   const { id, token, details, setDetails, rerender } = user;
+  const [photo, setPhoto] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,13 +30,21 @@ const DrawerContent = (props) => {
         }
       });
 
-      const userProfilePhoto = await axios.get(`${API_URL}/user/${id}/photo`, {
+      const userProfilePhoto = await fetch(`${API_URL}/user/${id}/photo`, {
+        method: 'GET',
         headers: {
           'X-Authorization': token,
-          'Content-Type': 'application/json'
         }
-      });
-      setDetails({ profile: userProfileGlobal.data, photo: userProfilePhoto.data });
+      }).then(res => res.blob())
+        .then(resBlob => {
+          let blob = new Blob([resBlob], { type: 'image/png' })
+          let reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = function () {
+            reader.result;
+          }
+        })
+      setDetails({ profile: userProfileGlobal.data, photo: userProfilePhoto });
     };
     fetchData();
   }, [id, token, rerender]);

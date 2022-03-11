@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import axios from 'axios';
 import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
