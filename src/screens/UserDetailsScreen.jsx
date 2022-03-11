@@ -13,9 +13,14 @@ const UserDetailsScreen = ({ route, navigation }) => {
   const {token, id, rerender} = useContext(UserContext);
   const [profileData, setProfileData] = useState('');
   const [postData, setPostData] = useState([]);
-  const [profilePic, setProfilePic] = useState(null)
+  const [profilePic, setProfilePic] = useState(null); 
+  const [displayMessage, setDisplayMessage] = useState('');
 
   const isFocused = useIsFocused();
+  const wipeData = () => {
+    setProfileData('');
+    setPostData('');
+  }
   useEffect(() => {
     console.log({isFocused})
     const fetchData = async () => {
@@ -31,7 +36,11 @@ const UserDetailsScreen = ({ route, navigation }) => {
           'X-Authorization': token,
           'Content-Type': 'application/json'
         }
-      }).then(data => setPostData(data.data)).catch(err => console.log(err))
+      }).then(data => setPostData(data.data))
+      .catch(err => {
+          setDisplayMessage('You can only view the posts of yourself or your friends')
+          console.log(err);
+      }); 
 
       await fetch(`${API_URL}/user/${route.params.id}/photo`, {
         method: 'GET',
@@ -48,8 +57,10 @@ const UserDetailsScreen = ({ route, navigation }) => {
           }
         })
     }
-    isFocused ? fetchData() : setProfileData({})
+    isFocused ? fetchData() : wipeData();
   }, [setProfileData, setPostData, rerender, setProfilePic, isFocused]);
+
+  console.log({profileData})
 
   return (
     <SafeAreaView style={styles.container}>
@@ -79,7 +90,15 @@ const UserDetailsScreen = ({ route, navigation }) => {
             </View>
             <View style={[styles.profileInfo, { borderColor: "#ff8f73", borderLeftWidth: 1, borderRightWidth: 1 }]} >
               <TouchableOpacity
-                onPress={() => navigation.reset({index:0, routes:[{name: 'Friends'}]})}
+                onPress={() => navigation.reset({
+                  index:0, 
+                  routes:[{
+                    name: 'Friends', 
+                    params: 
+                      {id: profileData.user_id}
+                  }]
+                })
+              }
                 style={[styles.profileInfo]}
               >
                 <Text style={[styles.text, { fontSize: 22 }]}>{profileData.friend_count}</Text>
@@ -103,6 +122,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
               )
             }
             )}
+            {displayMessage ? <Text>{displayMessage}</Text> : null}
           </View>
 
         </ScrollView>
