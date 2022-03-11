@@ -35,6 +35,7 @@ const TabRoutes = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: '#d3d3d3',
           borderRadius: 25,
@@ -43,12 +44,10 @@ const TabRoutes = () => {
           height: 70,
           left: 20,
           position: 'absolute',
+          display: "flex",
           right: 20,
           ...styles.shadow
         }
-      }}
-      tabBarOptions={{
-        showLabel: false
       }}
     >
       <Tab.Screen name="Home" component={Home}
@@ -138,7 +137,7 @@ const TabRoutes = () => {
             </View>
           )
         }} />
-    </Tab.Navigator>
+    </Tab.Navigator >
   )
 }
 
