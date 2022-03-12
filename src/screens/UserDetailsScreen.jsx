@@ -7,6 +7,7 @@ import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
 import PostInformation from './PostInformation';
 import { useIsFocused } from '@react-navigation/native';
+import Home from './Home';
 
 const UserDetailsScreen = ({ route, navigation }) => {
 
@@ -61,8 +62,6 @@ const UserDetailsScreen = ({ route, navigation }) => {
     isFocused ? fetchData() : wipeData();
   }, [setProfileData, setPostData, rerender, isFocused]);
 
-  console.log({profileData})
-
   return (
     <SafeAreaView style={styles.container}>
       <Provider>
@@ -108,6 +107,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
             </View>
           </View>
 
+          <Home id={route.params.id}/>
 
           <Text style={[styles.subTitle, styles.recent]}>Recent Activity</Text>
           <View style={{ alignItems: "center" }}>
@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
   },
   recent: {
     marginLeft: 78,
-    marginTop: 32,
     marginBottom: 6,
     fontSize: 10
   },

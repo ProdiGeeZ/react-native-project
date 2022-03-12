@@ -6,50 +6,65 @@ import { API_URL } from '../../consts.json';
 import { UserContext } from "../context/UserContext";
 
 
-const Home = () => {
-  const user = useContext(UserContext);
+const Home = (props) => {
+  const {id, token, rerender, setFriends, setRerender} = useContext(UserContext);
   const [text, setText] = useState('');
 
+  let idToUse; 
+  const routeID = props.id; 
+  if(routeID){
+    idToUse = routeID;
+  }else{
+    idToUse = id; 
+  }
+
   useEffect(() => {
-    axios.get(`${API_URL}/user/${user.id}/friends`, {
+    axios.get(`${API_URL}/user/${id}/friends`, {
       headers: {
-        'X-Authorization': user.token,
+        'X-Authorization': token,
         'Content-Type': 'application/json'
       }
-    }).then(data => user.setFriends(data.data))
+    }).then(data => setFriends(data.data))
       .catch(err => console.log(err))
-  }, [user.rerender]);
+  }, [rerender]);
 
   const post = () => {
-    axios.post(`${API_URL}/user/${user.id}/post`, {
+    axios.post(`${API_URL}/user/${idToUse}/post`, {
       text
     }, {
       headers: {
-        'X-Authorization': user.token,
+        'X-Authorization': token,
         'Content-Type': 'application/json'
       }
     }).then(() => setText(''))
       .catch((err) => console.log(err))
-    user.setRerender(!user.rerender);
+    setRerender(!rerender);
   }
 
   return (
     <ScrollView style={styles.root}>
-      <View >
+      <View>
         <TextInput
-          style={{ backgroundColor: '#d3d3d3' }}
+          style={{ 
+            backgroundColor: '#d3d3d3',
+            borderRadius: 23,
+            padding: 10,
+            marginBottom: 5
+          }}
           label='Add a new post'
           mode="outline"
           numberOfLines={5}
           value={text}
           onChangeText={text => setText(text)}
-          placeholder="Type Something..."
+          placeholder="What's on your mind?"
         />
-        <Button onPress={() => post()}> Post</Button>
+        <Button style={{
+          width: 150,
+          alignItems: 'flex-end',
+          alignSelf: 'flex-end',
+          backgroundColor: '#F02A4B'
+        }} onPress={() => post()}> Post</Button>
       </View>
-
-
-
     </ScrollView>
   )
 }
