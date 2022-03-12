@@ -7,8 +7,8 @@ const FloatingButton = (props) => {
 
   const [isOpen, setIsOpen] = useState(true);
   const toggleAnimation = useRef(new Animated.Value(0)).current;
-  const navigation = useNavigation(); 
-  const {id} = useContext(UserContext);
+  const navigation = useNavigation();
+  const { id } = useContext(UserContext);
 
   const toggleMenu = () => {
     const toValue = isOpen ? 0 : 1;
@@ -26,7 +26,7 @@ const FloatingButton = (props) => {
     outputRange: [0, 0, 1]
   })
 
-  const postsStyle = {
+  const friendsStyle = {
     transform: [
       { scale: toggleAnimation },
       {
@@ -38,7 +38,7 @@ const FloatingButton = (props) => {
     ]
   }
 
-  const friendsStyle = {
+  const searchStyle = {
     transform: [
       { scale: toggleAnimation },
       {
@@ -50,7 +50,7 @@ const FloatingButton = (props) => {
     ]
   }
 
-  const searchStyle = {
+  const profileStyle = {
     transform: [
       { scale: toggleAnimation },
       {
@@ -62,7 +62,7 @@ const FloatingButton = (props) => {
     ]
   }
 
-  const profileStyle = {
+  const homeStyle = {
     transform: [
       { scale: toggleAnimation },
       {
@@ -85,20 +85,13 @@ const FloatingButton = (props) => {
     ]
   }
 
-  const navigateTo = (location, userID) => {
+  const navigateTo = (location) => {
     toggleMenu();
-    const id = userID || {};
-    navigation.navigate(location, {id});
+    navigation.navigate(location);
   }
 
   return (
     <View style={[styles.container, props.style]}>
-
-      <TouchableWithoutFeedback onPress={() => navigateTo('Home')}>
-        <Animated.View style={[styles.button, styles.secondary, postsStyle, opacity]}>
-          <AntDesign name="addfile" size={20} color="#FA2A4B" />
-        </Animated.View>
-      </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback onPress={() => navigateTo('Friend Requests')}>
         <Animated.View style={[styles.button, styles.secondary, friendsStyle, opacity]}>
@@ -112,12 +105,27 @@ const FloatingButton = (props) => {
         </Animated.View>
       </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback onPress={() => navigateTo('User', id)}>
+      <TouchableWithoutFeedback onPress={() => {
+        toggleMenu();
+        navigation.reset({
+          index: 0,
+          routes: [{
+            name: 'User',
+            params:
+              { id }
+          }]
+        })
+      }}>
         <Animated.View style={[styles.button, styles.secondary, profileStyle, opacity]}>
           <AntDesign name="user" size={20} color="#FA2A4B" />
         </Animated.View>
       </TouchableWithoutFeedback>
 
+      <TouchableWithoutFeedback onPress={() => navigateTo('Home')}>
+        <Animated.View style={[styles.button, styles.secondary, homeStyle, opacity]}>
+          <AntDesign name="home" size={20} color="#FA2A4B" />
+        </Animated.View>
+      </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback onPress={() => toggleMenu()}>
         <Animated.View style={[styles.button, styles.menu, rotation]}>

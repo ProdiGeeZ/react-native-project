@@ -13,7 +13,7 @@ import { API_URL } from '../../consts.json';
 const CameraComponent = ({ hasPermission, setHasPermission }) => {
   const { id, token, rerender, setRerender } = useContext(UserContext);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const cameraRef = useRef(null)
+  const cameraRef = useRef(null);
 
   const sendToServer = async (data) => {
     const res = data.base64;

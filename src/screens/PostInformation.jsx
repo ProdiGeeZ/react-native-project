@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button, Card, Paragraph, Title, Dialog, Portal, TextInput } from 'react-native-paper';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base'
@@ -12,6 +12,9 @@ const PostInformation = ({ route, posts, date }) => {
   const user = useContext(UserContext);
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState(posts.text);
+  useEffect( () => {
+    setText(posts.text)
+  },[user.setRerender])
 
   const likePost = async (id) => {
     await axios.post(`${API_URL}/user/${route.params.id}/post/${id}/like`, {}, {
@@ -62,9 +65,9 @@ const PostInformation = ({ route, posts, date }) => {
     user.setRerender(!user.rerender);
   }
   return (
-    <View style={styles.recentItem}>
+    <View style={styles.recentItem} key={posts.post_id}>
       <View style={{ width: 350 }}>
-        <Card key={posts.post_id}>
+        <Card style={{backgroundColor: '#ececec' }}>
           <Card.Content>
             {isOwnPost(posts.author.user_id) ? (
               <>
