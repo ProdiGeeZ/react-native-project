@@ -6,7 +6,7 @@ import { API_URL } from '../../consts.json';
 import { UserContext } from "../context/UserContext";
 
 
-const Home = (props) => {
+const AddPost = (props) => {
   const {id, token, rerender, setFriends, setRerender} = useContext(UserContext);
   const [text, setText] = useState('');
 
@@ -46,7 +46,7 @@ const Home = (props) => {
       <View>
         <TextInput
           style={{ 
-            backgroundColor: '#d3d3d3',
+            backgroundColor: '#ececec',
             borderRadius: 23,
             padding: 10,
             marginBottom: 5
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
     padding: 25,
   }
 })
-export default Home; 
+export default AddPost; 

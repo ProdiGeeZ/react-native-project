@@ -7,15 +7,16 @@ import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
 import PostInformation from './PostInformation';
 import { useIsFocused } from '@react-navigation/native';
-import Home from './Home';
+import AddPost from './AddPost';
 
 const UserDetailsScreen = ({ route, navigation }) => {
 
-  const {token, id, rerender} = useContext(UserContext);
+  const { token, id, rerender } = useContext(UserContext);
   const [profileData, setProfileData] = useState('');
   const [postData, setPostData] = useState([]);
-  const [profilePic, setProfilePic] = useState(null); 
+  const [profilePic, setProfilePic] = useState(null);
   const [displayMessage, setDisplayMessage] = useState('');
+  const [err, setDisplayErr] = useState(false);
 
   const isFocused = useIsFocused();
   const wipeData = () => {
@@ -23,8 +24,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
     setPostData([]);
   }
   useEffect(() => {
-    console.log({isFocused})
-    console.log(route.params.id)
+    setDisplayErr(false);
     const fetchData = async () => {
       await axios.get(`${API_URL}/user/${route.params.id}`, {
         headers: {
@@ -39,10 +39,11 @@ const UserDetailsScreen = ({ route, navigation }) => {
           'Content-Type': 'application/json'
         }
       }).then(data => setPostData(data.data))
-      .catch(err => {
+        .catch(err => {
+          setDisplayErr(true);
           setDisplayMessage('You can only view the posts of yourself or your friends')
           console.log(err);
-      }); 
+        });
 
       await fetch(`${API_URL}/user/${route.params.id}/photo`, {
         method: 'GET',
@@ -71,7 +72,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
             <View style={styles.profileImage}>
               <Image
                 alt='profile image'
-                source={{ uri: profilePic ||  'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png' }}
+                source={{ uri: profilePic || 'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png' }}
                 style={styles.image}
                 resizeMode="center" />
             </View>
@@ -91,14 +92,14 @@ const UserDetailsScreen = ({ route, navigation }) => {
             <View style={[styles.profileInfo, { borderColor: "#ff8f73", borderLeftWidth: 1, borderRightWidth: 1 }]} >
               <TouchableOpacity
                 onPress={() => navigation.reset({
-                  index:0, 
-                  routes:[{
-                    name: 'Friends', 
-                    params: 
-                      {id: profileData.user_id}
+                  index: 0,
+                  routes: [{
+                    name: 'Friends',
+                    params:
+                      { id: profileData.user_id }
                   }]
                 })
-              }
+                }
                 style={[styles.profileInfo]}
               >
                 <Text style={[styles.text, { fontSize: 22 }]}>{profileData.friend_count}</Text>
@@ -106,9 +107,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-
-          <Home id={route.params.id}/>
-
+            {err ? null : <AddPost id={route.params.id} />}
           <Text style={[styles.subTitle, styles.recent]}>Recent Activity</Text>
           <View style={{ alignItems: "center" }}>
             {postData.map((posts) => {
@@ -176,6 +175,7 @@ const styles = StyleSheet.create({
   recent: {
     marginLeft: 78,
     marginBottom: 6,
+    marginTop: 15,
     fontSize: 10
   },
   subTitle: {
@@ -189,4 +189,4 @@ const styles = StyleSheet.create({
     color: "#52575D"
   }
 });
-export default UserDetailsScreen; 
+export default UserDetailsScreen;

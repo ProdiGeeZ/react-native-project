@@ -67,7 +67,7 @@ const PostInformation = ({ route, posts, date }) => {
   return (
     <View style={styles.recentItem}>
       <View style={{ width: 350 }}>
-        <Card key={posts.post_id}>
+        <Card style={{backgroundColor: '#ececec' }} key={posts.post_id}>
           <Card.Content>
             {isOwnPost(posts.author.user_id) ? (
               <>
