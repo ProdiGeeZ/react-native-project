@@ -85,7 +85,7 @@ const DrawerContent = (props) => {
             </View>
             <View style={{ marginLeft: 15 }, [styles.row]}>
               <View style={styles.section}>
-                <TouchableOpacity onPress={() => props.navigation.navigate('Friends')}>
+                <TouchableOpacity onPress={() => props.navigation.navigate('Friends', {id})}>
                   <Paragraph style={[styles.paragraph, styles.caption]}>{details.profile.friend_count} {' '}
                     <Caption style={styles.caption}>Friends</Caption>
                   </Paragraph>
