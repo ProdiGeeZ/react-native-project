@@ -26,7 +26,7 @@ const FloatingButton = (props) => {
     outputRange: [0, 0, 1]
   })
 
-  const postsStyle = {
+  const friendsStyle = {
     transform: [
       { scale: toggleAnimation },
       {
@@ -38,7 +38,7 @@ const FloatingButton = (props) => {
     ]
   }
 
-  const friendsStyle = {
+  const searchStyle = {
     transform: [
       { scale: toggleAnimation },
       {
@@ -50,7 +50,7 @@ const FloatingButton = (props) => {
     ]
   }
 
-  const searchStyle = {
+  const profileStyle = {
     transform: [
       { scale: toggleAnimation },
       {
@@ -62,7 +62,7 @@ const FloatingButton = (props) => {
     ]
   }
 
-  const profileStyle = {
+  const homeStyle = {
     transform: [
       { scale: toggleAnimation },
       {
@@ -93,12 +93,6 @@ const FloatingButton = (props) => {
   return (
     <View style={[styles.container, props.style]}>
 
-      <TouchableWithoutFeedback onPress={() => navigateTo('Home')}>
-        <Animated.View style={[styles.button, styles.secondary, postsStyle, opacity]}>
-          <AntDesign name="addfile" size={20} color="#FA2A4B" />
-        </Animated.View>
-      </TouchableWithoutFeedback>
-
       <TouchableWithoutFeedback onPress={() => navigateTo('Friend Requests')}>
         <Animated.View style={[styles.button, styles.secondary, friendsStyle, opacity]}>
           <AntDesign name="addusergroup" size={20} color="#FA2A4B" />
@@ -127,6 +121,11 @@ const FloatingButton = (props) => {
         </Animated.View>
       </TouchableWithoutFeedback>
 
+      <TouchableWithoutFeedback onPress={() => navigateTo('Home')}>
+        <Animated.View style={[styles.button, styles.secondary, homeStyle, opacity]}>
+          <AntDesign name="home" size={20} color="#FA2A4B" />
+        </Animated.View>
+      </TouchableWithoutFeedback>
 
       <TouchableWithoutFeedback onPress={() => toggleMenu()}>
         <Animated.View style={[styles.button, styles.menu, rotation]}>

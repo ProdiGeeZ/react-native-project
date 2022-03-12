@@ -65,9 +65,9 @@ const PostInformation = ({ route, posts, date }) => {
     user.setRerender(!user.rerender);
   }
   return (
-    <View style={styles.recentItem}>
+    <View style={styles.recentItem} key={posts.post_id}>
       <View style={{ width: 350 }}>
-        <Card style={{backgroundColor: '#ececec' }} key={posts.post_id}>
+        <Card style={{backgroundColor: '#ececec' }}>
           <Card.Content>
             {isOwnPost(posts.author.user_id) ? (
               <>

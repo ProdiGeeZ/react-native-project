@@ -115,7 +115,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
               return (
                 <PostInformation
                   route={route}
-                  key={posts.id}
+                  key={posts.post_id}
                   posts={posts}
                   date={date}
                 />
