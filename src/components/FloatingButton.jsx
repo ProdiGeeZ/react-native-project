@@ -7,8 +7,8 @@ const FloatingButton = (props) => {
 
   const [isOpen, setIsOpen] = useState(true);
   const toggleAnimation = useRef(new Animated.Value(0)).current;
-  const navigation = useNavigation(); 
-  const {id} = useContext(UserContext);
+  const navigation = useNavigation();
+  const { id } = useContext(UserContext);
 
   const toggleMenu = () => {
     const toValue = isOpen ? 0 : 1;
@@ -85,10 +85,9 @@ const FloatingButton = (props) => {
     ]
   }
 
-  const navigateTo = (location, userID) => {
+  const navigateTo = (location) => {
     toggleMenu();
-    const id = userID || {};
-    navigation.navigate(location, {id});
+    navigation.navigate(location);
   }
 
   return (
@@ -112,7 +111,17 @@ const FloatingButton = (props) => {
         </Animated.View>
       </TouchableWithoutFeedback>
 
-      <TouchableWithoutFeedback onPress={() => navigateTo('User', id)}>
+      <TouchableWithoutFeedback onPress={() => {
+        toggleMenu();
+        navigation.reset({
+          index: 0,
+          routes: [{
+            name: 'User',
+            params:
+              { id }
+          }]
+        })
+      }}>
         <Animated.View style={[styles.button, styles.secondary, profileStyle, opacity]}>
           <AntDesign name="user" size={20} color="#FA2A4B" />
         </Animated.View>
