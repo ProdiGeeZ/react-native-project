@@ -7,7 +7,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NativeBaseProvider } from 'native-base';
 
 import { UserProvider } from './src/context/UserContext';
-
 import DrawerContent from './src/components/DrawerContent';
 
 import LoginScreen from './src/screens/LoginScreen';
@@ -19,6 +18,7 @@ import FriendsScreen from './src/screens/FriendsScreen';
 import UserDetailsScreen from './src/screens/UserDetailsScreen';
 import FloatingButton from './src/components/FloatingButton';
 import Home from './src/screens/Home';
+import PostDetails from './src/screens/PostDetails';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -37,6 +37,7 @@ const DrawerRoutes = () => {
         <Drawer.Screen name="Friend Requests" component={FriendRequestScreen} />
         <Drawer.Screen name="Friends" component={FriendsScreen} />
         <Drawer.Screen name="Settings" component={SettingsScreen} />
+        <Drawer.Screen name="Post Details" component={PostDetails}/>
       </Drawer.Navigator>
       <FloatingButton style={{ bottom: 100, right: 50, alignSelf: 'center', position: 'absolute' }} />
     </>
