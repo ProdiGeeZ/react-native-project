@@ -3,7 +3,8 @@ import { Searchbar, DataTable, Text } from 'react-native-paper';
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 import { API_URL } from '../../consts.json';
-import { ScrollView, TouchableOpacity } from 'react-native';
+import { ScrollView,  TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons'
 
 const SearchScreen = () => {
@@ -11,6 +12,7 @@ const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const onChangeSearch = query => setSearchQuery(query);
   const { token, friends, id } = useContext(UserContext);
+  const navigation = useNavigation();
 
   useEffect(() => {
     axios.get(`${API_URL}/search`, {
@@ -61,7 +63,8 @@ const SearchScreen = () => {
         {friendData
           .filter((data) => data.user_id !== id)
           .map((user) => (
-            <DataTable.Row key={user.user_id}>
+            <TouchableOpacity key={user.user_id} onPress={() => navigation.navigate('User', {id: user.user_id})}>
+            <DataTable.Row  >
               <DataTable.Cell>{user.user_givenname}</DataTable.Cell>
               <DataTable.Cell>{user.user_familyname}</DataTable.Cell>
               <DataTable.Cell>
@@ -70,6 +73,7 @@ const SearchScreen = () => {
                 </TouchableOpacity>
               </DataTable.Cell>
             </DataTable.Row>
+            </TouchableOpacity>
           ))}
 
       </DataTable>

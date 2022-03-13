@@ -1,63 +1,63 @@
-import axios from "axios";
-import { Button, ScrollView, View } from "native-base";
-import React, { useEffect, useState, useContext } from "react";
-import { StyleSheet, TextInput } from "react-native";
-import { API_URL } from '../../consts.json';
-import { UserContext } from "../context/UserContext";
-
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../context/UserContext';
+import { API_URL } from '../../consts.json'
+import AddPost from './AddPost';
+import PostInformation from './PostInformation';
+import { Provider } from 'react-native-paper';
+import { ScrollView, Text, View } from 'native-base';
 
 const Home = () => {
-  const user = useContext(UserContext);
-  const [text, setText] = useState('');
 
-  useEffect(() => {
-    axios.get(`${API_URL}/user/${user.id}/friends`, {
-      headers: {
-        'X-Authorization': user.token,
-        'Content-Type': 'application/json'
-      }
-    }).then(data => user.setFriends(data.data))
-      .catch(err => console.log(err))
-  }, [user.rerender]);
+    const { friends, token, rerender } = useContext(UserContext);
+    const [postsData, setPostsData] = useState([]);
 
-  const post = () => {
-    axios.post(`${API_URL}/user/${user.id}/post`, {
-      text
-    }, {
-      headers: {
-        'X-Authorization': user.token,
-        'Content-Type': 'application/json'
-      }
-    }).then(() => setText(''))
-      .catch((err) => console.log(err))
-    user.setRerender(!user.rerender);
-  }
+    
+    useEffect(() => {
+        const friendIDs = friends.map((friend) => friend.user_id);
+        friendIDs.forEach(async (id) => {
+            await axios.get(`${API_URL}/user/${id}/post`, {
+                headers: {
+                    'X-Authorization': token,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(({data}) => {
+                    data.map((post) => Object.assign(post, {humanID: id}));
+                    setPostsData(prev => prev.concat(data))
+                })
+                .catch(err => console.log(err))
+        });
+        return () => {
+            setPostsData([]);
+        }
+    },[friends, setPostsData]);
 
-  return (
-    <ScrollView style={styles.root}>
-      <View >
-        <TextInput
-          style={{ backgroundColor: '#d3d3d3' }}
-          label='Add a new post'
-          mode="outline"
-          numberOfLines={5}
-          value={text}
-          onChangeText={text => setText(text)}
-          placeholder="Type Something..."
-        />
-        <Button onPress={() => post()}> Post</Button>
-      </View>
-
-
-
-    </ScrollView>
-  )
+    return (
+        <ScrollView>
+            <AddPost />
+            <Provider>
+                <View style={{ alignItems: "center" }}>
+                    {postsData.length > 0 ? postsData.map((posts) => {
+                        const date = new Date(posts.timestamp);
+                        return (
+                            <PostInformation
+                                key={posts.timestamp}
+                                route={{
+                                        params:{
+                                            id: posts.humanID
+                                        }
+                                }}
+                                posts={posts}
+                                date={date}
+                            />
+                        )
+                    }
+                    ): <Text> Sorry there's no posts to show </Text>}
+                </View>
+            </Provider>
+        </ScrollView>
+    )
 }
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    padding: 25,
-  }
-})
-export default Home; 
+export default Home;

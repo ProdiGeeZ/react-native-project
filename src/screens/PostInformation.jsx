@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button, Card, Paragraph, Title, Dialog, Portal, TextInput } from 'react-native-paper';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base'
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
@@ -12,6 +13,11 @@ const PostInformation = ({ route, posts, date }) => {
   const user = useContext(UserContext);
   const [visible, setVisible] = useState(false);
   const [text, setText] = useState(posts.text);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    setText(posts.text)
+  }, [user.setRerender])
 
   const likePost = async (id) => {
     await axios.post(`${API_URL}/user/${route.params.id}/post/${id}/like`, {}, {
@@ -62,9 +68,23 @@ const PostInformation = ({ route, posts, date }) => {
     user.setRerender(!user.rerender);
   }
   return (
-    <View style={styles.recentItem}>
-      <View style={{ width: 350 }}>
-        <Card key={posts.post_id}>
+    <View style={styles.recentItem} key={posts.post_id}>
+      <TouchableOpacity style={{ width: 350 }} onPress={() => navigation.navigate('Post Details', {
+        id: route.params.id,
+        token:  user.token, 
+        posts,
+        visible,
+        date,
+        text,
+        isOwnPost, 
+        likePost,
+        updatePost,
+        removeLike,
+        setVisible,
+        setText,
+      }
+      )}>
+        <Card style={{ backgroundColor: '#ececec' }}>
           <Card.Content>
             {isOwnPost(posts.author.user_id) ? (
               <>
@@ -96,7 +116,6 @@ const PostInformation = ({ route, posts, date }) => {
             <Paragraph style={[styles.text, styles.activityText]}>
               {posts.text}
             </Paragraph>
-            <Text>{' '}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={{ alignItems: 'center', flexDirection: 'row' }}>
                 <View style={{
@@ -110,6 +129,7 @@ const PostInformation = ({ route, posts, date }) => {
                 }}>
                   <AntDesign name='like2' size={12} color='white' />
                 </View>
+                <Text>{'\n'}</Text>
                 <Text>  {posts.numLikes} Likes </Text>
               </View>
               <Text style={{ alignItems: 'flex-end' }}>
@@ -129,7 +149,7 @@ const PostInformation = ({ route, posts, date }) => {
             ) : null}
           </Card.Content>
         </Card>
-      </View>
+      </TouchableOpacity>
     </View>
   )
 }

@@ -21,7 +21,7 @@ import CameraComponent from './CameraComponent';
 
 const SettingsScreen = () => {
   const user = useContext(UserContext);
-  const { id, token, details, password, setDetails } = user;
+  const { id, token, details, password, setDetails, profilePic } = user;
   const { first_name, last_name, email } = details.profile;
 
   const [updatedFirstName, setFirstName] = useState(first_name);
@@ -112,7 +112,7 @@ const SettingsScreen = () => {
             <View style={styles.profileContainer}>
               <ImageBackground
                 source={{
-                  uri: details.photo
+                  uri: profilePic
                 }}
                 style={styles.profilePicture}
                 imageStyle={{ borderRadius: 15 }}>
@@ -258,9 +258,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   uploadPanel: {
-    padding: 20,
-    backgroundColor: '#FFFFFF',
     paddingTop: 20,
+    backgroundColor: '#FFFFFF',
   },
   userName: {
     marginTop: 10,

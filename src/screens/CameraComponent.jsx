@@ -13,7 +13,7 @@ import { API_URL } from '../../consts.json';
 const CameraComponent = ({ hasPermission, setHasPermission }) => {
   const { id, token, rerender, setRerender } = useContext(UserContext);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const cameraRef = useRef(null)
+  const cameraRef = useRef(null);
 
   const sendToServer = async (data) => {
     const res = data.base64;
@@ -67,13 +67,20 @@ const CameraComponent = ({ hasPermission, setHasPermission }) => {
 
                 setType(switchCam);
               }}>
-              <Text style={styles.text}> Flip </Text>
+              <Text style={[styles.text]}> Flip </Text>
             </TouchableOpacity>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
-                style={styles.button}
+                style={[styles.button,{
+                   alignSelf: 'flex-end', 
+                  left: 100 , 
+                  width: 60,
+                  height: 60,
+                  borderRadius: 60 / 2,
+                  backgroundColor: 'white'
+                }]}
                 onPress={() => takePicture()}>
-                <Text style={[styles.text, { alignSelf: 'flex-end' }]}> Take Photo </Text>
+                <Text style={[styles.text]}> Take Photo </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -90,6 +97,9 @@ const styles = StyleSheet.create({
     flex: 0,
     alignSelf: 'flex-end',
     alignItems: 'center',
+    justifyContent: 'center',
+    bottom:10, 
+
   },
   buttonContainer: {
     flex: 1,
@@ -120,4 +130,4 @@ const styles = StyleSheet.create({
     color: 'white',
   }
 })
-export default CameraComponent; 
+export default CameraComponent;

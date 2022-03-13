@@ -7,17 +7,24 @@ import { API_URL } from '../../consts.json'
 import { UserContext } from '../context/UserContext';
 import PostInformation from './PostInformation';
 import { useIsFocused } from '@react-navigation/native';
+import AddPost from './AddPost';
 
 const UserDetailsScreen = ({ route, navigation }) => {
 
-  const {token, id, rerender} = useContext(UserContext);
+  const { token, id, rerender } = useContext(UserContext);
   const [profileData, setProfileData] = useState('');
   const [postData, setPostData] = useState([]);
-  const [profilePic, setProfilePic] = useState(null)
+  const [profilePic, setProfilePic] = useState(null);
+  const [displayMessage, setDisplayMessage] = useState('');
+  const [err, setDisplayErr] = useState(false);
 
   const isFocused = useIsFocused();
+  const wipeData = () => {
+    setProfileData('');
+    setPostData([]);
+  }
   useEffect(() => {
-    console.log({isFocused})
+    setDisplayErr(false);
     const fetchData = async () => {
       await axios.get(`${API_URL}/user/${route.params.id}`, {
         headers: {
@@ -31,7 +38,12 @@ const UserDetailsScreen = ({ route, navigation }) => {
           'X-Authorization': token,
           'Content-Type': 'application/json'
         }
-      }).then(data => setPostData(data.data)).catch(err => console.log(err))
+      }).then(data => setPostData(data.data))
+        .catch(err => {
+          setDisplayErr(true);
+          setDisplayMessage('You can only view the posts of yourself or your friends')
+          console.log(err);
+        });
 
       await fetch(`${API_URL}/user/${route.params.id}/photo`, {
         method: 'GET',
@@ -48,8 +60,8 @@ const UserDetailsScreen = ({ route, navigation }) => {
           }
         })
     }
-    isFocused ? fetchData() : setProfileData({})
-  }, [setProfileData, setPostData, rerender, setProfilePic, isFocused]);
+    isFocused ? fetchData() : wipeData();
+  }, [setProfileData, setPostData, rerender, isFocused]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,7 +72,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
             <View style={styles.profileImage}>
               <Image
                 alt='profile image'
-                source={{ uri: profilePic ||  'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png' }}
+                source={{ uri: profilePic || 'https://www.kindpng.com/picc/m/353-3534825_cool-profile-avatar-picture-cool-profile-hd-png.png' }}
                 style={styles.image}
                 resizeMode="center" />
             </View>
@@ -79,7 +91,15 @@ const UserDetailsScreen = ({ route, navigation }) => {
             </View>
             <View style={[styles.profileInfo, { borderColor: "#ff8f73", borderLeftWidth: 1, borderRightWidth: 1 }]} >
               <TouchableOpacity
-                onPress={() => navigation.reset({index:0, routes:[{name: 'Friends'}]})}
+                onPress={() => navigation.reset({
+                  index: 0,
+                  routes: [{
+                    name: 'Friends',
+                    params:
+                      { id: profileData.user_id }
+                  }]
+                })
+                }
                 style={[styles.profileInfo]}
               >
                 <Text style={[styles.text, { fontSize: 22 }]}>{profileData.friend_count}</Text>
@@ -87,8 +107,7 @@ const UserDetailsScreen = ({ route, navigation }) => {
               </TouchableOpacity>
             </View>
           </View>
-
-
+            {err ? null : <AddPost id={route.params.id} />}
           <Text style={[styles.subTitle, styles.recent]}>Recent Activity</Text>
           <View style={{ alignItems: "center" }}>
             {postData.map((posts) => {
@@ -96,13 +115,14 @@ const UserDetailsScreen = ({ route, navigation }) => {
               return (
                 <PostInformation
                   route={route}
-                  key={posts.id}
+                  key={posts.post_id}
                   posts={posts}
                   date={date}
                 />
               )
             }
             )}
+            {displayMessage ? <Text>{displayMessage}</Text> : null}
           </View>
 
         </ScrollView>
@@ -154,8 +174,8 @@ const styles = StyleSheet.create({
   },
   recent: {
     marginLeft: 78,
-    marginTop: 32,
     marginBottom: 6,
+    marginTop: 15,
     fontSize: 10
   },
   subTitle: {
@@ -169,4 +189,4 @@ const styles = StyleSheet.create({
     color: "#52575D"
   }
 });
-export default UserDetailsScreen; 
+export default UserDetailsScreen;
