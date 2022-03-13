@@ -48,7 +48,6 @@ const FriendsScreen = ({navigation, route}) => {
       <View>
 
         <Text style={{ textAlign: 'center' }}>Friends:</Text>
-        {console.log(same)}
         {!same ? (<Text style={{textAlign: 'center', color: 'red'}}> You can only view your friends, or friends of your friend. </Text>) :
         friends.length > 0 ? friends.map((friend) => (
           <TouchableOpacity

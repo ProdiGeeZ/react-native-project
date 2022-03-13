@@ -7,7 +7,7 @@ import PostInformation from './PostInformation';
 import { Provider } from 'react-native-paper';
 import { ScrollView, Text, View } from 'native-base';
 
-const Home = ({ route }) => {
+const Home = () => {
 
     const { friends, token, rerender } = useContext(UserContext);
     const [postsData, setPostsData] = useState([]);
@@ -15,8 +15,6 @@ const Home = ({ route }) => {
     
     useEffect(() => {
         const friendIDs = friends.map((friend) => friend.user_id);
-        console.log({friendIDs})
-        let arr = [];
         friendIDs.forEach(async (id) => {
             await axios.get(`${API_URL}/user/${id}/post`, {
                 headers: {
@@ -33,9 +31,7 @@ const Home = ({ route }) => {
         return () => {
             setPostsData([]);
         }
-    },[friends, rerender]);
-
-    console.log({postsData});
+    },[friends, setPostsData]);
 
     return (
         <ScrollView>

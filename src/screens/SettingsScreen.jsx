@@ -258,9 +258,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   uploadPanel: {
-    padding: 20,
-    backgroundColor: '#FFFFFF',
     paddingTop: 20,
+    backgroundColor: '#FFFFFF',
   },
   userName: {
     marginTop: 10,
