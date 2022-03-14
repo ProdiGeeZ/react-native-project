@@ -11,7 +11,7 @@
 3. Open terminal and type in `ipconfig` grab IPV4 Address and replace `localhost` in `consts.json` 
 3. `expo r -c`
 4. Run project in EXPO App
-5. Now, enjoy! :rocket:
+5. Now, enjoy! 
 
 
 https://user-images.githubusercontent.com/82912568/158064902-4f1aa479-8cb1-4381-a98d-5ecf4d09b1ea.mp4
