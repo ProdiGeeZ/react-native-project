@@ -1,4 +1,4 @@
-# 1CKW100 - React Native App (Spacebook)
+#SpaceBook Social App - React Native (1CKW100)
 
 ## To run project:
  ### Server 
